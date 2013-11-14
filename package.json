@@ -1,0 +1,21 @@
+{
+  "name": "wms-builder",
+  "version": "0.0.0",
+  "description": "A URL query builder for WMS/WFS servers. Specifically the NICTA WMS/WFS servers.",
+  "main": "index.html",
+  "dependencies": {
+    "angularjs": "~0.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+  },
+  "keywords": [
+    "WMS",
+    "WFS",
+    "NICTA",
+    "map",
+    "geo",
+    "geospatial"
+  ],
+  "author": "Kenni Bawden"
+}
