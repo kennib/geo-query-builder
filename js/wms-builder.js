@@ -13,11 +13,17 @@ wmsBuilder.value("serviceTypes", {
     requestTypes: [
       "GetFeature",
     ],
+    outputFormats: [
+      "PNG",
+    ],
   },
   "WFS": {
     url: "WFS",
     requestTypes: [
       "GetMap",
+    ],
+    outputFormats: [
+      "json",
     ],
   }
 });
@@ -27,9 +33,14 @@ wmsBuilder.value("requestTypes", {
   "Get Map": "GetMap",
 });
 
+wmsBuilder.value("formats", {
+  "PNG": "PNG",
+  "GeoJSON": "json",
+})
+
 wmsBuilder.controller("builder", ["$scope",
-  "hosts", "serviceTypes", "requestTypes",
-  function($scope, hosts, serviceTypes, requestTypes) {
+  "hosts", "serviceTypes", "requestTypes", "formats",
+  function($scope, hosts, serviceTypes, requestTypes, formats) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -45,11 +56,15 @@ wmsBuilder.controller("builder", ["$scope",
     $scope.typeName = "";
     $scope.featureLimit = 50;
 
+    $scope.formats = formats;
+    $scope.format = formats["PNG"];
+
     $scope.url = function() {
       return $scope.host + '?' +
         'service=' + $scope.serviceType.url +
         '&request=' + $scope.requestType +
         '&typeName=' + $scope.typeName +
-        '&maxFeatures=' + $scope.featureLimit;
+        '&maxFeatures=' + $scope.featureLimit +
+        '&outputFormat=' + $scope.format;
     }
   }]);

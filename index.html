@@ -27,6 +27,11 @@
           Select a request type:
           <select name="requestType" ng-model="requestType" ng-options="requestType as requestName for (requestName, requestType) in requestTypes"></select>
         </label>  
+
+        <label for="format">
+          Select an output format
+          <select name="format" ng-model="format" ng-options="format as formatName for (formatName, format) in formats"></select>
+        </label>  
       </fieldset>
       
       <fieldset>
