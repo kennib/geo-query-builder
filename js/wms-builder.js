@@ -8,20 +8,43 @@ wmsBuilder.value("hosts", {
 });
 
 wmsBuilder.value("serviceTypes", {
-  "WMS": "WMS",
-  "WFS": "WFS",
+  "WMS": {
+    url: "WMS",
+    requestTypes: [
+      "GetFeature",
+    ],
+  },
+  "WFS": {
+    url: "WFS",
+    requestTypes: [
+      "GetMap",
+    ],
+  }
+});
+
+wmsBuilder.value("requestTypes", {
+  "Get Feature": "GetFeature",
+  "Get Map": "GetMap",
 });
 
 wmsBuilder.controller("builder", ["$scope",
-  "hosts", "serviceTypes",
-  function($scope, hosts, serviceTypes) {
+  "hosts", "serviceTypes", "requestTypes",
+  function($scope, hosts, serviceTypes, requestTypes) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
     $scope.serviceTypes = serviceTypes;
     $scope.serviceType = serviceTypes["WMS"];
 
+    $scope.requestTypes = requestTypes;
+    $scope.requestType = requestTypes["Get Map"];
+    $scope.validRequestType = function(requestType) {
+      return $scope.serviceType.requestTypes[requestType] !== undefined;
+    }
+
     $scope.url = function() {
-      return $scope.host + '?' + 'service=' + $scope.serviceType;
+      return $scope.host + '?' +
+        'service=' + $scope.serviceType.url +
+        '&request=' + $scope.requestType;
     }
   }]);

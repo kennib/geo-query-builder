@@ -20,7 +20,12 @@
 
         <label for="serviceType">
           Select a service type:
-          <select name="serviceType" ng-model="serviceType" ng-options="serviceVal as serviceName for (serviceName, serviceVal) in serviceTypes"></select>
+          <select name="serviceType" ng-model="serviceType" ng-options="serviceType as serviceName for (serviceName, serviceType) in serviceTypes"></select>
+        </label>
+
+        <label for="requestType">
+          Select a request type:
+          <select name="requestType" ng-model="requestType" ng-options="requestType as requestName for (requestName, requestType) in requestTypes"></select>
         </label>
       </fieldset>
     </form>
