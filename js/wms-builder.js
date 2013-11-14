@@ -32,8 +32,8 @@ wmsBuilder.filter("isIn", function() {
 });
 
 wmsBuilder.value("hosts", {
-  "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k/geotopo_250k/ows",
-  "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds/admin_bnds/ows",
+  "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
+  "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
 });
 
 wmsBuilder.value("serviceTypes", {
@@ -67,9 +67,9 @@ wmsBuilder.value("formats", {
   "GeoJSON": "json",
 })
 
-wmsBuilder.controller("builder", ["$scope",
+wmsBuilder.controller("builder", ["$scope", "$http",
   "hosts", "serviceTypes", "requestTypes", "formats",
-  function($scope, hosts, serviceTypes, requestTypes, formats) {
+  function($scope, $http, hosts, serviceTypes, requestTypes, formats) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -81,19 +81,31 @@ wmsBuilder.controller("builder", ["$scope",
     $scope.validRequestType = function(requestType) {
       return $scope.serviceType.requestTypes[requestType] !== undefined;
     }
+    
+    $scope.formats = formats;
+    $scope.format = formats["PNG"];
 
     $scope.typeName = "";
     $scope.featureLimit = 50;
 
-    $scope.formats = formats;
-    $scope.format = formats["PNG"];
-
     $scope.url = function() {
-      return $scope.host + '?' +
-        'service=' + $scope.serviceType.url +
-        '&request=' + $scope.requestType +
-        '&typeName=' + $scope.typeName +
-        '&maxFeatures=' + $scope.featureLimit +
-        '&outputFormat=' + $scope.format;
+      var params = {
+        service: $scope.serviceType.url,
+        request: $scope.requestType,
+        outputFormat: $scope.format,
+      };
+
+      if (params.service == "WFS") {
+        params.typeName = $scope.typeName;
+        params.maxFeatures = $scope.featureLimit;
+      }
+
+      var request = {
+        method: "GET",
+        url: $scope.host,
+        params: params,
+      };
+
+      return $scope.host + "/ows?" + $.param(params);
     }
   }]);
