@@ -17,11 +17,16 @@
           Select a WMS server:
           <select name="host" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
         </label>
+
+        <label for="serviceType">
+          Select a service type:
+          <select name="serviceType" ng-model="serviceType" ng-options="serviceVal as serviceName for (serviceName, serviceVal) in serviceTypes"></select>
+        </label>
       </fieldset>
     </form>
 
     <p>
-      WMS URL: <a ng-href="{{ host }}">{{ host }}</a>
+      WMS URL: <a ng-href="{{ url() }}">{{ url() }}</a>
     </p>
   </body>
 </html>
