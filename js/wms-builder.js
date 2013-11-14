@@ -3,8 +3,8 @@ var wmsBuilder = angular.module("wms-builder", [
 ]);
 
 wmsBuilder.value("hosts", {
-  "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k/web/ows",
-  "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds/web/ows",
+  "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k/geotopo_250k/ows",
+  "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds/admin_bnds/ows",
 });
 
 wmsBuilder.value("serviceTypes", {
@@ -42,9 +42,12 @@ wmsBuilder.controller("builder", ["$scope",
       return $scope.serviceType.requestTypes[requestType] !== undefined;
     }
 
+    $scope.typeName = "";
+
     $scope.url = function() {
       return $scope.host + '?' +
         'service=' + $scope.serviceType.url +
-        '&request=' + $scope.requestType;
+        '&request=' + $scope.requestType +
+        '&typeName=' + $scope.typeName;
     }
   }]);
