@@ -2,6 +2,35 @@ var wmsBuilder = angular.module("wms-builder", [
   "ngRoute",
 ]);
 
+/* Filter an array by the objects in another array */
+wmsBuilder.filter("isIn", function() {
+  function isIn(obj, array) {
+    return array.indexOf(obj) != -1;
+  };
+
+  return function(obj, filterArray) {
+    var newObj = {};
+    
+    for (var key in obj) {
+      if (isIn(key, filterArray) || isIn(obj[key], filterArray))
+        newObj[key] = obj[key];
+    }
+
+    return newObj;
+
+    /*
+    var newArray = [];
+
+    array.forEach(function(obj) {
+      if (isIn(obj, filterArray))
+        newArray.push(obj);
+    });
+
+    return newArray;
+    */
+  };
+});
+
 wmsBuilder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k/geotopo_250k/ows",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds/admin_bnds/ows",
@@ -11,7 +40,7 @@ wmsBuilder.value("serviceTypes", {
   "WMS": {
     url: "WMS",
     requestTypes: [
-      "GetFeature",
+      "GetMap",
     ],
     outputFormats: [
       "PNG",
@@ -20,7 +49,7 @@ wmsBuilder.value("serviceTypes", {
   "WFS": {
     url: "WFS",
     requestTypes: [
-      "GetMap",
+      "GetFeature",
     ],
     outputFormats: [
       "json",
