@@ -10,6 +10,18 @@
 
   <body ng-controller="builder">
     <h1>WMS Builder</h1>
-    <a ng-href="{{ url }}">{{ url }}</a>
+
+    <form>
+      <fieldset>
+        <label for="host">
+          Select a WMS server:
+          <select name="host" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
+        </label>
+      </fieldset>
+    </form>
+
+    <p>
+      WMS URL: <a ng-href="{{ host }}">{{ host }}</a>
+    </p>
   </body>
 </html>
