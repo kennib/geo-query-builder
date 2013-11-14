@@ -43,11 +43,13 @@ wmsBuilder.controller("builder", ["$scope",
     }
 
     $scope.typeName = "";
+    $scope.featureLimit = 50;
 
     $scope.url = function() {
       return $scope.host + '?' +
         'service=' + $scope.serviceType.url +
         '&request=' + $scope.requestType +
-        '&typeName=' + $scope.typeName;
+        '&typeName=' + $scope.typeName +
+        '&maxFeatures=' + $scope.featureLimit;
     }
   }]);
