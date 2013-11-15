@@ -22,7 +22,7 @@
 
         <label for="serviceType">
           Select a service type:
-          <select name="serviceType" ng-model="serviceType" ng-options="serviceType as serviceName for (serviceName, serviceType) in serviceTypes"></select>
+          <select name="serviceType" ng-model="serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
         </label>
 
         <label for="requestType">
@@ -52,7 +52,7 @@
         </fieldset>
       </fieldset>
       
-      <fieldset ng-show="serviceType.url == 'WMS'">
+      <fieldset ng-show="serviceType == 'WMS'">
         <label for="layer">
           Select the layers to request:
           <select name="layer" ng-model="layer" ng-options="layer as layer.Name for layer in layers"></select>
@@ -69,7 +69,7 @@
         </fieldset>
       </fieldset>
 
-      <fieldset ng-show="serviceType.url == 'WFS'">
+      <fieldset ng-show="serviceType == 'WFS'">
         <label for="typeName">
           Select the name of the feature type:
           <select name="typeName" ng-model="typeName" ng-options="typeName for typeName in typeNames"></select>

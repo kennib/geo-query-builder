@@ -45,69 +45,33 @@ wmsBuilder.value("hosts", {
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
 });
 
-wmsBuilder.value("serviceTypes", {
-  "WMS": {
-    url: "WMS",
-    requestTypes: [
-      "GetMap",
-    ],
-    outputFormats: [
-      "PNG",
-    ],
-  },
-  "WFS": {
-    url: "WFS",
-    requestTypes: [
-      "GetFeature",
-    ],
-    outputFormats: [
-      "json",
-    ],
-  }
-});
-
-wmsBuilder.value("requestTypes", {
-  "Get Feature": "GetFeature",
-  "Get Map": "GetMap",
-});
-
-wmsBuilder.value("formats", {
-  "PNG": "image/PNG",
-  "GeoJSON": "json",
-})
-
+wmsBuilder.value("serviceTypes", [
+  "WMS",
+  "WFS",
+])
+ 
 wmsBuilder.controller("builder", ["$scope", "$http",
   "getCapabilities",
-  "hosts", "serviceTypes", "requestTypes", "formats",
-  function($scope, $http, getCapabilities, hosts, serviceTypes, requestTypes, formats) {
+  "hosts", "serviceTypes",
+  function($scope, $http, getCapabilities, hosts, serviceTypes) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
     $scope.serviceTypes = serviceTypes;
     $scope.serviceType = serviceTypes["WMS"];
 
-    $scope.requestTypes = requestTypes;
-    $scope.requestType = requestTypes["Get Map"];
-    $scope.validRequestType = function(requestType) {
-      return $scope.serviceType.requestTypes[requestType] !== undefined;
-    }
-    
-    $scope.formats = formats;
-    $scope.format = formats["PNG"];
-
     $scope.bbox = {};
 
     $scope.width = 200;
     $scope.height = 200;
 
-    $scope.typeName = "";
     $scope.featureLimit = 50;
 
     // Produce an angular request object
     function request() {
       window.bbox = $scope.bbox;
       var params = {
-        service: $scope.serviceType.url,
+        service: $scope.serviceType,
         request: $scope.requestType,
         outputFormat: $scope.format,
         format: $scope.format,
@@ -147,7 +111,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       var req = request();
 
       getCapabilities(req).success(function(xml) {
-        if ($scope.serviceType.url == "WMS") {
+        if ($scope.serviceType == "WMS") {
           var cap = $.xml2json(xml).Capability;
           var requestTypes = cap.Request;
           for (var rt in requestTypes)
@@ -157,7 +121,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           $scope.requestTypes = requestTypes;
           $scope.layers = layers;
         }
-        if ($scope.serviceType.url == "WFS") {
+        if ($scope.serviceType == "WFS") {
           var requestTypes = {};
           $(xml)
             .find('ows\\:operationsmetadata')
