@@ -145,12 +145,36 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       var req = request();
 
       getCapabilities(req).success(function(xml) {
-        var cap = $.xml2json(xml).Capability;
-        var layers = cap.Layer.Layer;
-        var formats = cap.Request[$scope.requestType].Format;
+        if ($scope.serviceType.url == "WMS") {
+          var cap = $.xml2json(xml).Capability;
+          var layers = cap.Layer.Layer;
+          var formats = cap.Request[$scope.requestType].Format;
 
-        $scope.layers = layers;
-        $scope.formats = formats;
+          $scope.layers = layers;
+          $scope.formats = formats;
+        }
+        if ($scope.serviceType.url == "WFS") {
+          var formats = [];
+          $(xml)
+            .find('ows\\:operationsmetadata')
+            .children('ows\\:operation[name="GetFeature"]')
+            .find('ows\\:parameter[name="outputFormat"]')
+            .children().children().each(function() {
+              formats.push($(this).text());
+            });
+
+          var featureTypes = [];
+          $(xml)
+            .find('featuretypelist')
+            .children('featuretype')
+            .children('name')
+            .each(function() {
+              featureTypes.push($(this).text());
+            });
+
+          $scope.typeNames = featureTypes;
+          $scope.formats = formats;
+        }
       });
     };
 
