@@ -52,19 +52,7 @@
         </fieldset>
       </fieldset>
       
-      <fieldset>
-        <label for="typeName">
-          Enter the feature type's name:
-          <input name="typeName" ng-model="typeName" placeholder="set:name"></input>
-        </label>
-        
-        <label for="featureLimit">
-          Maximum number of features for this request:
-          <input name="featureLimit" type="number" ng-model="featureLimit"></input>
-        </label>        
-      </fieldset>
-
-      <fieldset>
+      <fieldset ng-show="serviceType.url == 'WMS'">
         <label for="layer">
           Select the layers to request:
           <select name="layer" ng-model="layer" ng-options="layer as layer.Name for layer in layers"></select>
@@ -78,6 +66,18 @@
             <input name="height" type="height" ng-model="height" step="10" min="1">
           </label>
         </fieldset>
+      </fieldset>
+
+      <fieldset ng-show="serviceType.url == 'WFS'">
+        <label for="typeName">
+          Enter the feature type's name:
+          <input name="typeName" ng-model="typeName" placeholder="set:name"></input>
+        </label>
+        
+        <label for="featureLimit">
+          Maximum number of features for this request:
+          <input name="featureLimit" type="number" ng-model="featureLimit"></input>
+        </label>        
       </fieldset>
     </form>
 
