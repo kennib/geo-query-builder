@@ -72,7 +72,7 @@ wmsBuilder.value("requestTypes", {
 });
 
 wmsBuilder.value("formats", {
-  "PNG": "PNG",
+  "PNG": "image/PNG",
   "GeoJSON": "json",
 })
 
@@ -95,17 +95,24 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.formats = formats;
     $scope.format = formats["PNG"];
 
+    $scope.bbox = {};
+
     $scope.typeName = "";
     $scope.featureLimit = 50;
 
     // Produce an angular request object
     function request() {
+      window.bbox = $scope.bbox;
       var params = {
         service: $scope.serviceType.url,
         request: $scope.requestType,
         outputFormat: $scope.format,
+        bbox: !$.isEmptyObject($scope.bbox) ? [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join() : undefined,
       };
 
+      if (params.service == "WMS") {
+        params.layers = $scope.layer ? $scope.layer.Title : undefined;
+      }
       if (params.service == "WFS") {
         params.typeName = $scope.typeName;
         params.maxFeatures = $scope.featureLimit;
@@ -134,6 +141,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       getCapabilities(req).success(function(xml) {
         var cap = $.xml2json(xml).Capability;
         var layers = cap.Layer.Layer;
+
         $scope.layers = layers;
       });
     };
@@ -141,4 +149,12 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     // Update capabilities if the host or service type changes
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
+
+    // Update the bounding box based on the layer selection
+    $scope.$watch('layer', function(layer) {
+      if (layer) {
+        var bbox = layer.BoundingBox[0];
+        $scope.bbox = bbox;
+      }
+    });
   }]);

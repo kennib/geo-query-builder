@@ -34,6 +34,22 @@
           Select an output format
           <select name="format" ng-model="format" ng-options="format as formatName for (formatName, format) in formats|isIn:serviceType.outputFormats"></select>
         </label>  
+
+        <fieldset>
+          Input the geographic bounds for this request:
+          <label for="minx">
+            <input name="minx" ng-model="bbox.minx">
+          </label>
+          <label for="maxx">
+            <input name="maxx" ng-model="bbox.maxx">
+          </label>
+          <label for="miny">
+            <input name="miny" ng-model="bbox.miny">
+          </label>
+          <label for="maxy">
+            <input name="maxy" ng-model="bbox.maxy">
+          </label>
+        </fieldset>
       </fieldset>
       
       <fieldset>
@@ -51,7 +67,7 @@
       <fieldset>
         <label for="layer">
           Select the layers to request:
-          <select name="layer" ng-model="layer" ng-options="layer.Name as layer.Title for layer in layers"></select>
+          <select name="layer" ng-model="layer" ng-options="layer as layer.Name for layer in layers"></select>
         </label>
       </fieldset>
     </form>
