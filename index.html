@@ -69,6 +69,15 @@
           Select the layers to request:
           <select name="layer" ng-model="layer" ng-options="layer as layer.Name for layer in layers"></select>
         </label>
+
+        <fieldset>
+          <label for="width">
+            <input name="width" type="number" ng-model="width" step="10" min="1">
+          </label>
+          <label for="height">
+            <input name="height" type="height" ng-model="height" step="10" min="1">
+          </label>
+        </fieldset>
       </fieldset>
     </form>
 

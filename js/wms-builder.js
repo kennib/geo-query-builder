@@ -97,6 +97,9 @@ wmsBuilder.controller("builder", ["$scope", "$http",
 
     $scope.bbox = {};
 
+    $scope.width = 200;
+    $scope.height = 200;
+
     $scope.typeName = "";
     $scope.featureLimit = 50;
 
@@ -113,6 +116,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
 
       if (params.service == "WMS") {
         params.layers = $scope.layer ? $scope.layer.Title : undefined;
+        params.width = $scope.width;
+        params.height = $scope.height;
       }
       if (params.service == "WFS") {
         params.typeName = $scope.typeName;
