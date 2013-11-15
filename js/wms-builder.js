@@ -81,12 +81,12 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
 
       if (params.service == "WMS") {
-        params.layers = $scope.layer ? $scope.layer.Title : undefined;
+        params.layers = $scope.layer ? $scope.layer.name : undefined;
         params.width = $scope.width;
         params.height = $scope.height;
       }
       if (params.service == "WFS") {
-        params.typeName = $scope.typeName;
+        params.typeName = $scope.typeName ? $scope.typeName.name : undefined;
         params.maxFeatures = $scope.featureLimit;
       }
 
@@ -116,7 +116,15 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           var requestTypes = cap.Request;
           for (var rt in requestTypes)
             requestTypes[rt].formats = requestTypes[rt].Format;
-          var layers = cap.Layer.Layer;
+          var layers = [];
+          var Layer = cap.Layer.Layer;
+          for (var l in Layer) {
+            var layer = {
+              bbox: Layer[l].BoundingBox[0],
+              name: Layer[l].Name,
+            };
+            layers.push(layer);
+          }
 
           $scope.requestTypes = requestTypes;
           $scope.layers = layers;
@@ -141,9 +149,14 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           $(xml)
             .find('featuretypelist')
             .children('featuretype')
-            .children('name')
             .each(function() {
-              featureTypes.push($(this).text());
+              var feature = $(this);
+              var name = feature .children('name').text();
+              var box = feature.children('ows\\:wgs84boundingbox');
+              var min = box.children('ows\\:lowercorner').text().split(' ');
+              var max = box.children('ows\\:uppercorner').text().split(' ');
+              var bbox = {minx: min[1], miny: min[0], maxx: max[1], maxy: max[0]};
+              featureTypes.push({name: name, bbox: bbox});
             });
 
           $scope.requestTypes = requestTypes;
@@ -156,11 +169,13 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
 
-    // Update the bounding box based on the layer selection
-    $scope.$watch('layer', function(layer) {
+    // Update the bounding box based on the layer/typeName selection
+    function updateBBox(layer) {
       if (layer) {
-        var bbox = layer.BoundingBox[0];
+        var bbox = layer.bbox;
         $scope.bbox = bbox;
       }
-    });
+    }
+    $scope.$watch('layer', updateBBox);
+    $scope.$watch('typeName', updateBBox);
   }]);
