@@ -31,6 +31,15 @@ wmsBuilder.filter("isIn", function() {
   };
 });
 
+/* Get the capabilities of a WMS/WFS service */
+wmsBuilder.service("getCapabilities", ['$http', function($http) {
+  return function(request) {
+    request.params.request = "GetCapabilities";
+    request.headers["Accept"] = "application/xml";
+    return $http(request);
+  };
+}]);
+
 wmsBuilder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
@@ -68,8 +77,9 @@ wmsBuilder.value("formats", {
 })
 
 wmsBuilder.controller("builder", ["$scope", "$http",
+  "getCapabilities",
   "hosts", "serviceTypes", "requestTypes", "formats",
-  function($scope, $http, hosts, serviceTypes, requestTypes, formats) {
+  function($scope, $http, getCapabilities, hosts, serviceTypes, requestTypes, formats) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -88,7 +98,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.typeName = "";
     $scope.featureLimit = 50;
 
-    $scope.url = function() {
+    // Produce an angular request object
+    function request() {
       var params = {
         service: $scope.serviceType.url,
         request: $scope.requestType,
@@ -102,10 +113,32 @@ wmsBuilder.controller("builder", ["$scope", "$http",
 
       var request = {
         method: "GET",
-        url: $scope.host,
+        headers: {},
+        url: $scope.host + "/ows",
         params: params,
       };
 
-      return $scope.host + "/ows?" + $.param(params);
+      return request;
     }
+
+    // Create a URL for the request
+    $scope.url = function() {
+      var req = request();
+      return req.url + "?" + $.param(req.params);
+    }
+
+    // Get the capabilities of the current WMS/WFS server selection
+    function updateCapabilities() {
+      var req = request();
+
+      getCapabilities(req).success(function(xml) {
+        var cap = $.xml2json(xml).Capability;
+        var layers = cap.Layer.Layer;
+        $scope.layers = layers;
+      });
+    };
+
+    // Update capabilities if the host or service type changes
+    $scope.$watch('host', updateCapabilities);
+    $scope.$watch('serviceType', updateCapabilities);
   }]);

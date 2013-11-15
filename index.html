@@ -3,6 +3,7 @@
   <head>
     <title>WMS Builder</title>
     <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="lib/xml2json.js"></script>
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
     <script src="js/wms-builder.js"></script>
@@ -45,6 +46,13 @@
           Maximum number of features for this request:
           <input name="featureLimit" type="number" ng-model="featureLimit"></input>
         </label>        
+      </fieldset>
+
+      <fieldset>
+        <label for="layer">
+          Select the layers to request:
+          <select name="layer" ng-model="layer" ng-options="layer.Name as layer.Title for layer in layers"></select>
+        </label>
       </fieldset>
     </form>
 
