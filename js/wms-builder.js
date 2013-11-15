@@ -107,6 +107,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         service: $scope.serviceType.url,
         request: $scope.requestType,
         outputFormat: $scope.format,
+        format: $scope.format,
         bbox: !$.isEmptyObject($scope.bbox) ? [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join() : undefined,
       };
 
