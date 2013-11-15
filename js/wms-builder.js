@@ -147,8 +147,10 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       getCapabilities(req).success(function(xml) {
         var cap = $.xml2json(xml).Capability;
         var layers = cap.Layer.Layer;
+        var formats = cap.Request[$scope.requestType].Format;
 
         $scope.layers = layers;
+        $scope.formats = formats;
       });
     };
 

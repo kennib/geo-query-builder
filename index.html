@@ -32,7 +32,7 @@
 
         <label for="format">
           Select an output format
-          <select name="format" ng-model="format" ng-options="format as formatName for (formatName, format) in formats|isIn:serviceType.outputFormats"></select>
+          <select name="format" ng-model="format" ng-options="format for format in formats"></select>
         </label>  
 
         <fieldset>
