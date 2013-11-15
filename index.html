@@ -27,12 +27,12 @@
 
         <label for="requestType">
           Select a request type:
-          <select name="requestType" ng-model="requestType" ng-options="requestType as requestName for (requestName, requestType) in requestTypes|isIn:serviceType.requestTypes"></select>
+          <select name="requestType" ng-model="requestType" ng-options="requestType as requestType for (requestType, request) in requestTypes"></select>
         </label> 
 
         <label for="format">
           Select an output format
-          <select name="format" ng-model="format" ng-options="format for format in formats"></select>
+          <select name="format" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
         </label>  
 
         <fieldset>

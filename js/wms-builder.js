@@ -111,8 +111,10 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         request: $scope.requestType,
         outputFormat: $scope.format,
         format: $scope.format,
-        bbox: !$.isEmptyObject($scope.bbox) ? [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join() : undefined,
       };
+
+      if (!$.isEmptyObject($scope.bbox))
+        params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
 
       if (params.service == "WMS") {
         params.layers = $scope.layer ? $scope.layer.Title : undefined;
@@ -147,20 +149,28 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       getCapabilities(req).success(function(xml) {
         if ($scope.serviceType.url == "WMS") {
           var cap = $.xml2json(xml).Capability;
+          var requestTypes = cap.Request;
+          for (var rt in requestTypes)
+            requestTypes[rt].formats = requestTypes[rt].Format;
           var layers = cap.Layer.Layer;
-          var formats = cap.Request[$scope.requestType].Format;
 
+          $scope.requestTypes = requestTypes;
           $scope.layers = layers;
-          $scope.formats = formats;
         }
         if ($scope.serviceType.url == "WFS") {
-          var formats = [];
+          var requestTypes = {};
           $(xml)
             .find('ows\\:operationsmetadata')
-            .children('ows\\:operation[name="GetFeature"]')
-            .find('ows\\:parameter[name="outputFormat"]')
-            .children().children().each(function() {
-              formats.push($(this).text());
+            .children('ows\\:operation')
+            .each(function() {
+              var op = $(this);
+              var name = op.attr("name");
+              var formats = [];
+              op.find('ows\\:parameter[name="outputFormat"]')
+                .children().children().each(function() {
+                  formats.push($(this).text());
+                });
+              requestTypes[name] = {formats: formats};
             });
 
           var featureTypes = [];
@@ -172,8 +182,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
               featureTypes.push($(this).text());
             });
 
+          $scope.requestTypes = requestTypes;
           $scope.typeNames = featureTypes;
-          $scope.formats = formats;
         }
       });
     };
