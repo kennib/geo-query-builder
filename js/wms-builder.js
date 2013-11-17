@@ -49,7 +49,7 @@ wmsBuilder.value("serviceTypes", [
   "WMS",
   "WFS",
 ])
- 
+
 wmsBuilder.controller("builder", ["$scope", "$http",
   "getCapabilities",
   "hosts", "serviceTypes",
@@ -66,6 +66,9 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.height = 200;
 
     $scope.featureLimit = 50;
+
+    // Initialize the Google map
+    initMap();
 
     // Produce an angular request object
     function request() {
@@ -179,3 +182,13 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.$watch('layer', updateBBox);
     $scope.$watch('typeName', updateBBox);
   }]);
+
+function initMap() {
+  var mapOptions = {
+    center: new google.maps.LatLng(-31.952162,135.175781), // Australia
+    zoom: 1,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+}

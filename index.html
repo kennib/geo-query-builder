@@ -2,12 +2,14 @@
 <html ng-app="wms-builder">
   <head>
     <title>WMS Builder</title>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="lib/jquery-2.0.3.min.js"></script>
     <script src="lib/xml2json.js"></script>
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
     <script src="js/wms-builder.js"></script>
 
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
   </head>
@@ -37,7 +39,7 @@
           <select name="format" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
         </label>  
 
-        <fieldset>
+        <fieldset class="row">
           Input the geographic bounds for this request:
           <label for="minx">
             <input name="minx" ng-model="bbox.minx">
@@ -51,6 +53,11 @@
           <label for="maxy">
             <input name="maxy" ng-model="bbox.maxy">
           </label>
+
+          <label>
+            Or use the map:
+          </label>
+          <div id="map" class="col-md-4"></div>
         </fieldset>
       </fieldset>
       
