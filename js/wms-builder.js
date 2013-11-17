@@ -68,7 +68,40 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.featureLimit = 50;
 
     // Initialize the Google map
-    initMap();
+    var map = initMap();
+    // Update bounds on map rectangle update
+    function updateMapBounds(bounds) {
+      var ne = map.rectangle.getBounds().getNorthEast();
+      var sw = map.rectangle.getBounds().getSouthWest();
+      
+      $scope.bbox = {
+        minx: sw.lng(),
+        maxx: ne.lng(),
+        miny: sw.lat(),
+        maxy: ne.lat(),
+      };
+
+      $scope.$apply('bbox');
+    }
+    var boundsListener = google.maps.event.addListener(map.rectangle, 'bounds_changed',updateMapBounds);
+    // Update rectangle on bounds update
+    $scope.$watch('bbox', function(bbox) {
+      var ne = map.rectangle.getBounds().getNorthEast();
+      var sw = map.rectangle.getBounds().getSouthWest();
+
+      if (bbox && bbox.minx && bbox.maxx && bbox.miny && bbox.maxy) {
+        var bounds = new google.maps.LatLngBounds(
+          new google.maps.LatLng(bbox.miny, bbox.minx),
+          new google.maps.LatLng(bbox.maxy, bbox.maxx)
+        );
+
+        // Add and remove listener to stop an infinite update loop
+        // between the map and the bounds inputs
+        google.maps.event.removeListener(boundsListener);
+        map.rectangle.setOptions({bounds: bounds}); // do the update
+        boundsListener = google.maps.event.addListener(map.rectangle, 'bounds_changed',updateMapBounds);
+      }
+    });
 
     // Produce an angular request object
     function request() {
@@ -184,6 +217,11 @@ wmsBuilder.controller("builder", ["$scope", "$http",
   }]);
 
 function initMap() {
+  var australiaBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(-9.142175976703609, 96.816941408),
+    new google.maps.LatLng( -43.74050960205765, 159.109219008)
+  );
+
   var mapOptions = {
     center: new google.maps.LatLng(-31.952162,135.175781), // Australia
     zoom: 1,
@@ -191,4 +229,13 @@ function initMap() {
   };
 
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  var rectangle = new google.maps.Rectangle({
+    bounds: australiaBounds,
+    editable: true
+  });
+
+  rectangle.setMap(map);
+
+  return {map: map, rectangle: rectangle};
 }
