@@ -23,6 +23,8 @@
     <form role="form">
       <!-- General inputs -->
       <fieldset class="row">
+        <h2>Service settings</h2>
+
         <fieldset class="col-md-3">
           <label for="host">Select a WMS server:</label>
           <select name="host" class="form-control" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
@@ -46,6 +48,8 @@
 
       <!-- Bounds inputs -->
       <fieldset class="row">
+        <h2>Geographic Bounds</h2>
+
         <fieldset class="col-md-6">
           <label>Input the geographic bounds for this request:</label>
 
@@ -85,6 +89,8 @@
       
       <!-- WMS inputs -->
       <fieldset class="row" ng-show="serviceType == 'WMS'">
+        <h2>WMS Settings</h2>
+
         <fieldset class="col-md-4">
           <label for="layers">Select the layers to request:</label>
           <select name="layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
@@ -114,6 +120,8 @@
 
       <!-- WFS inputs -->
       <fieldset class="row" ng-show="serviceType == 'WFS'">
+        <h2>WFS Settings</h2>
+
         <fieldset class="col-md-4">
           <label for="feature">Select the name of the feature type:</label>
           <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
@@ -128,6 +136,7 @@
       
     <!-- WMS/WFS outputs -->
     <div class="media">
+      <h2>Data Preview</h2>
       <div id="preview-image" class="pull-left">
         <img class="media-object" ng-src="{{ image(200) }}">
       </div>
