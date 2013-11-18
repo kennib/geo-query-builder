@@ -138,12 +138,12 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       }
 
       if (params.service == "WMS" && params.request != "GetCapabilities") {
-        params.layers = $scope.layer ? $scope.layer.name : undefined;
+        params.layers = $scope.feature;
         params.width = $scope.width;
         params.height = $scope.height;
       }
       if (params.service == "WFS" && params.request != "GetCapabilities") {
-        params.typeName = $scope.typeName ? $scope.typeName.name : undefined;
+        params.typeName = $scope.feature;
         params.maxFeatures = $scope.featureLimit;
       }
 
@@ -180,11 +180,11 @@ wmsBuilder.controller("builder", ["$scope", "$http",
               bbox: Layer[l].BoundingBox[0],
               name: Layer[l].Name,
             };
-            layers.push(layer);
+            layers[layer.name] = layer;
           }
 
           $scope.requestTypes = requestTypes;
-          $scope.layers = layers;
+          $scope.featureList = layers;
         }
         if ($scope.serviceType == "WFS") {
           var requestTypes = {};
@@ -213,11 +213,11 @@ wmsBuilder.controller("builder", ["$scope", "$http",
               var min = box.children('ows\\:lowercorner').text().split(' ');
               var max = box.children('ows\\:uppercorner').text().split(' ');
               var bbox = {minx: min[0], maxx: max[0], miny: min[1], maxy: max[1]};
-              featureTypes.push({name: name, bbox: bbox});
+              featureTypes[name] = {name: name, bbox: bbox};
             });
 
           $scope.requestTypes = requestTypes;
-          $scope.typeNames = featureTypes;
+          $scope.featureList = featureTypes;
         }
         
         var def = defaults[$scope.serviceType];
@@ -230,15 +230,14 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
 
-    // Update the bounding box based on the layer/typeName selection
-    function updateBBox(layer) {
-      if (layer) {
-        var bbox = layer.bbox;
+    // Update the bounding box based on the layer/feature selection
+    function updateBBox(feature) {
+      if (feature) {
+        var bbox = $scope.featureList[feature].bbox;
         $scope.bbox = bbox;
       }
     }
-    $scope.$watch('layer', updateBBox);
-    $scope.$watch('typeName', updateBBox);
+    $scope.$watch('feature', updateBBox);
   }]);
 
 function initMap() {

@@ -65,9 +65,9 @@
       </fieldset>
       
       <fieldset ng-show="serviceType == 'WMS'">
-        <label for="layer">
+        <label for="layers">
           Select the layers to request:
-          <select name="layer" ng-model="layer" ng-options="layer as layer.name for layer in layers"></select>
+          <select name="layers" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
         </label>
 
         <fieldset>
@@ -82,9 +82,9 @@
       </fieldset>
 
       <fieldset ng-show="serviceType == 'WFS'">
-        <label for="typeName">
+        <label for="feature">
           Select the name of the feature type:
-          <select name="typeName" ng-model="typeName" ng-options="type as type.name for type in typeNames"></select>
+          <select name="feature" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
         </label>
         
         <label for="featureLimit">
