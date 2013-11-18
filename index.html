@@ -40,23 +40,26 @@
         </label>  
 
         <fieldset class="row">
-          Input the geographic bounds for this request:
-          <label for="minx">
-            <input name="minx" ng-model="bbox.minx">
-          </label>
-          <label for="maxx">
-            <input name="maxx" ng-model="bbox.maxx">
-          </label>
+          <label>Input the geographic bounds for this request:</label>
+
           <label for="miny">
+            South
             <input name="miny" ng-model="bbox.miny">
           </label>
+          <label for="minx">
+            West
+            <input name="minx" ng-model="bbox.minx">
+          </label>
           <label for="maxy">
+            North
             <input name="maxy" ng-model="bbox.maxy">
           </label>
-
-          <label>
-            Or use the map:
+          <label for="maxx">
+            East
+            <input name="maxx" ng-model="bbox.maxx">
           </label>
+
+          <label> Or use the map:</label>
           <div id="map" class="col-md-4"></div>
         </fieldset>
       </fieldset>
