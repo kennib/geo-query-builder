@@ -1,12 +1,17 @@
 header {
   width: 100%;
-  padding: 15px !important;
-  padding-bottom: 30px !important;
+  padding: 10px !important;
+  padding-left: 15px !important;
+  padding-bottom: 20px !important;
   margin: 0px !important;
 }
 
 form {
   padding: 15px;
+}
+
+form, #preview {
+  margin: 0px;
 }
 
 #map {
@@ -40,6 +45,14 @@ form {
 body {
   color: #111;
   background-color: hsl(216, 100%, 95%);
+  background-image: url('../images/arches.png');
+}
+
+.container {
+  border: solid 1px #EEE;
+  border-top: none;
+  border-bottom: none;
+  padding: 0px;
 }
 
 header {
@@ -48,7 +61,7 @@ header {
 }
 
 form {
-  background-color: #FAFAFA;
+  background-color: white;
 }
 
 #preview {
