@@ -103,10 +103,10 @@
             WMS Settings
           </h2>
 
-          <fieldset class="col-md-4">
-            <label for="layers">Select the layers to request:</label>
+          <fieldset class="col-md-4 has-error" ng-class="{'has-success': features}">
+            <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
-              multiple="multiple" multiselect-dropdown></select>
+              multiple="multiple" multiselect-dropdown required></select>
            </fieldset>
 
           <fieldset class="col-md-4">
@@ -137,8 +137,8 @@
             WFS Settings
           </h2>
 
-          <fieldset class="col-md-4">
-            <label for="feature">Select the name of the feature type:</label>
+          <fieldset class="col-md-4 has-error" ng-class="{'has-success': feature}">
+            <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
           </fieldset>
          
