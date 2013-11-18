@@ -195,6 +195,11 @@ wmsBuilder.controller("builder", ["$scope", "$http",
 
     // Get the capabilities of the current WMS/WFS server selection
     function updateCapabilities() {
+      // Reset old features
+      $scope.features = undefined;
+      $scope.feature = undefined;
+
+      // Get the new capabilities
       var req = request();
 
       getCapabilities(req).success(function(xml) {
@@ -255,7 +260,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           $scope.requestTypes = requestTypes;
           $scope.featureList = featureTypes;
         }
-        
+
+        // Set new defaults
         var def = defaults[$scope.serviceType];
         $scope.requestType = def.requestType;
         $scope.format = def.format;
