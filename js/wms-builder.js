@@ -171,7 +171,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     // Create an image link for the request
     $scope.image = function(height) {
       // Only map if there are features to map
-      if ($scope.features || $scope.freature) {
+      if ($scope.features || $scope.feature) {
         var imageParams = {
           service: "WMS",
           request: "GetMap",
@@ -179,7 +179,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           format: "image/png",
           width: getImageWidth($scope.bbox, height),
           height: height,
-          layers: $scope.service=="WMS"? $scope.features : $scope.feature,
+          layers: ($scope.serviceType=="WMS")? $scope.features.join() : $scope.feature,
         };
         var req = request(imageParams);
         return req.url + "?" + $.param(req.params);
