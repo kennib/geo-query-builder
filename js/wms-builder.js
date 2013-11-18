@@ -158,9 +158,25 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     }
 
     // Create a URL for the request
-    $scope.url = function() {
+    $scope.url = function(override) {
       var req = request();
       return req.url + "?" + $.param(req.params);
+    }
+    // Create an image link for the request
+    $scope.image = function() {
+      // Only map if there are features to map
+      if ($scope.features || $scope.freature) {
+        var imageParams = {
+          service: "WMS",
+          request: "GetMap",
+          output: "image/png",
+        };
+        var req = request();
+        req.params = angular.extend(req.params, imageParams);
+        return req.url + "?" + $.param(req.params);
+      } else {
+        return "";
+      }
     }
 
     // Get the capabilities of the current WMS/WFS server selection
