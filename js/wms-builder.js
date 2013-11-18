@@ -194,10 +194,12 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     }
 
     // Get the capabilities of the current WMS/WFS server selection
-    function updateCapabilities() {
-      // Reset old features
-      $scope.features = undefined;
-      $scope.feature = undefined;
+    function updateCapabilities(updated) {
+      // Reset old features if there is a new host
+      if ($scope.host == updated) {
+        $scope.features = undefined;
+        $scope.feature = undefined;
+      }
 
       // Get the new capabilities
       var req = request();
