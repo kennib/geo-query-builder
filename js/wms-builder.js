@@ -168,10 +168,14 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       var req = request();
       return req.url + "?" + $.param(req.params);
     }
+
     // Create an image link for the request
     $scope.image = function(height) {
       // Only map if there are features to map
       if ($scope.features || $scope.feature) {
+        $("#preview-image img").attr("src", "images/loading.gif");
+        $scope.loading = true;
+
         var imageParams = {
           service: "WMS",
           request: "GetMap",
@@ -182,7 +186,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           layers: ($scope.serviceType=="WMS")? $scope.features.join() : $scope.feature,
         };
         var req = request(imageParams);
-        return req.url + "?" + $.param(req.params);
+        var src = req.url + "?" + $.param(req.params);
+        $("#preview-image img").attr("src", src);
       } else {
         return "";
       }
