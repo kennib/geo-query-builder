@@ -113,8 +113,12 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         format: $scope.format,
       };
 
-      if (!$.isEmptyObject($scope.bbox))
-        params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
+      if (!$.isEmptyObject($scope.bbox)) {
+        if (params.service == "WMS")
+          params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
+        if (params.service == "WFS")
+          params.bbox = [$scope.bbox.miny, $scope.bbox.minx, $scope.bbox.maxy, $scope.bbox.maxx].join();
+      }
 
       if (params.service == "WMS") {
         params.layers = $scope.layer ? $scope.layer.name : undefined;
@@ -191,7 +195,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
               var box = feature.children('ows\\:wgs84boundingbox');
               var min = box.children('ows\\:lowercorner').text().split(' ');
               var max = box.children('ows\\:uppercorner').text().split(' ');
-              var bbox = {minx: min[1], miny: min[0], maxx: max[1], maxy: max[0]};
+              var bbox = {minx: min[0], maxx: max[0], miny: min[1], maxy: max[1]};
               featureTypes.push({name: name, bbox: bbox});
             });
 
