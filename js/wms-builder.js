@@ -48,19 +48,36 @@ wmsBuilder.value("hosts", {
 wmsBuilder.value("serviceTypes", [
   "WMS",
   "WFS",
-])
+]);
+
+wmsBuilder.value("defaults", {
+  WMS: {
+    requestType: "GetMap", 
+    format: "image/png",
+  },
+  WFS: {
+    requestType: "GetFeature",
+    format: "json",
+  },
+});
 
 wmsBuilder.controller("builder", ["$scope", "$http",
   "getCapabilities",
-  "hosts", "serviceTypes",
-  function($scope, $http, getCapabilities, hosts, serviceTypes) {
+  "hosts", "serviceTypes", "defaults",
+  function($scope, $http, getCapabilities, hosts, serviceTypes, defaults) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
     $scope.serviceTypes = serviceTypes;
-    $scope.serviceType = serviceTypes["WMS"];
+    $scope.serviceType = serviceTypes[0];
 
-    $scope.bbox = {};
+    // Default to Australian bounds
+    $scope.bbox = {
+      minx: 96.816941408,
+      miny: -43.74050960205765,  
+      maxx: 159.109219008,
+      maxy: -9.142175976703609,
+    };
 
     $scope.width = 200;
     $scope.height = 200;
@@ -113,19 +130,19 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         format: $scope.format,
       };
 
-      if (!$.isEmptyObject($scope.bbox)) {
+      if (!$.isEmptyObject($scope.bbox) && params.request != "GetCapabilities") {
         if (params.service == "WMS")
           params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
         if (params.service == "WFS")
           params.bbox = [$scope.bbox.miny, $scope.bbox.minx, $scope.bbox.maxy, $scope.bbox.maxx].join();
       }
 
-      if (params.service == "WMS") {
+      if (params.service == "WMS" && params.request != "GetCapabilities") {
         params.layers = $scope.layer ? $scope.layer.name : undefined;
         params.width = $scope.width;
         params.height = $scope.height;
       }
-      if (params.service == "WFS") {
+      if (params.service == "WFS" && params.request != "GetCapabilities") {
         params.typeName = $scope.typeName ? $scope.typeName.name : undefined;
         params.maxFeatures = $scope.featureLimit;
       }
@@ -202,6 +219,10 @@ wmsBuilder.controller("builder", ["$scope", "$http",
           $scope.requestTypes = requestTypes;
           $scope.typeNames = featureTypes;
         }
+        
+        var def = defaults[$scope.serviceType];
+        $scope.requestType = def.requestType;
+        $scope.format = def.format;
       });
     };
 
@@ -221,11 +242,6 @@ wmsBuilder.controller("builder", ["$scope", "$http",
   }]);
 
 function initMap() {
-  var australiaBounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(-9.142175976703609, 96.816941408),
-    new google.maps.LatLng( -43.74050960205765, 159.109219008)
-  );
-
   var mapOptions = {
     center: new google.maps.LatLng(-31.952162,135.175781), // Australia
     zoom: 1,
@@ -235,7 +251,7 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
   var rectangle = new google.maps.Rectangle({
-    bounds: australiaBounds,
+    bounds: new google.maps.LatLngBounds(),
     editable: true
   });
 
