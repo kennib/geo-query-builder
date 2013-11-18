@@ -187,8 +187,14 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         if ($scope.serviceType == "WMS") {
           var cap = $.xml2json(xml).Capability;
           var requestTypes = cap.Request;
-          for (var rt in requestTypes)
-            requestTypes[rt].formats = requestTypes[rt].Format;
+          for (var rt in requestTypes) {
+            var formats = requestTypes[rt].Format;
+
+            if (typeof(formats) != typeof([]))
+              requestTypes[rt].formats = [formats];
+            else
+              requestTypes[rt].formats = formats;
+          }
           var layers = [];
           var Layer = cap.Layer.Layer;
           for (var l in Layer) {
