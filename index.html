@@ -15,91 +15,125 @@
   </head>
 
   <body ng-controller="builder">
-    <h1>WMS Builder</h1>
+    <!-- Header -->
+    <header class="page-header">
+      <h1>WMS Builder</h1>
+    </header>
 
-    <form>
-      <fieldset>
-        <label for="host">
-          Select a WMS server:
-          <select name="host" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
-        </label>
+    <form role="form">
+      <!-- General inputs -->
+      <fieldset class="row">
+        <fieldset class="col-md-3">
+          <label for="host">Select a WMS server:</label>
+          <select name="host" class="form-control" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
+        </fieldset>
 
-        <label for="serviceType">
-          Select a service type:
-          <select name="serviceType" ng-model="serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
-        </label>
+        <fieldset class="col-md-3">
+        <label for="serviceType">Select a service type:</label>
+          <select name="serviceType" class="form-control" ng-model="serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
+        </fieldset>
 
-        <label for="requestType">
-          Select a request type:
-          <select name="requestType" ng-model="requestType" ng-options="requestType as requestType for (requestType, request) in requestTypes"></select>
-        </label> 
+        <fieldset class="col-md-3">
+        <label for="requestType">Select a request type:</label> 
+          <select name="requestType" class="form-control" ng-model="requestType" ng-options="requestType as requestType for (requestType, request) in requestTypes"></select>
+        </fieldset>
 
-        <label for="format">
-          Select an output format
-          <select name="format" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
-        </label>  
+        <fieldset class="col-md-3">
+        <label for="format">Select an output format</label>  
+          <select name="format" class="form-control" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
+        </fieldset>
+      </fieldset>
 
-        <fieldset class="row">
+      <!-- Bounds inputs -->
+      <fieldset class="row">
+        <fieldset class="col-md-6">
           <label>Input the geographic bounds for this request:</label>
 
-          <label for="miny">
-            South
-            <input name="miny" ng-model="bbox.miny">
-          </label>
-          <label for="minx">
-            West
-            <input name="minx" ng-model="bbox.minx">
-          </label>
-          <label for="maxy">
-            North
-            <input name="maxy" ng-model="bbox.maxy">
-          </label>
-          <label for="maxx">
-            East
-            <input name="maxx" ng-model="bbox.maxx">
-          </label>
+          <div class="row">
+            <label for="miny" class="col-md-2 control-label">South</label>
+            <div class="col-md-8">
+              <input name="miny" class="form-control" ng-model="bbox.miny">
+            </div>
+          </div>
 
-          <label> Or use the map:</label>
-          <div id="map" class="col-md-4"></div>
+          <div class="row">
+            <label for="minx" class="col-md-2 control-label">West</label>
+            <div class="col-md-8">
+              <input name="minx" class="form-control" ng-model="bbox.minx">
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="maxy" class="col-md-2 control-label">North</label>
+            <div class="col-md-8">
+              <input name="maxy" class="form-control" ng-model="bbox.maxy">
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="maxx" class="col-md-2 control-label">East</label>
+            <div class="col-md-8">
+              <input name="maxx" class="form-control" ng-model="bbox.maxx">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="col-md-6">
+          <div id="map"></div>
         </fieldset>
       </fieldset>
       
-      <fieldset ng-show="serviceType == 'WMS'">
-        <label for="layers">
-          Select the layers to request:
-          <select name="layers" ng-model="features" ng-options="name as name for (name, feature) in featureList"
+      <!-- WMS inputs -->
+      <fieldset class="row" ng-show="serviceType == 'WMS'">
+        <fieldset class="col-md-4">
+          <label for="layers">Select the layers to request:</label>
+          <select name="layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
             multiple="multiple" multiselect-dropdown></select>
-        </label>
+         </fieldset>
 
-        <fieldset>
-          Input image width and height:
-          <label for="width">
-            <input name="width" type="number" ng-model="width" step="10" min="0">
-          </label>
-          <label for="height">
-            <input name="height" type="number" ng-model="height" step="10" min="0">
-          </label>
+        <fieldset class="col-md-4">
+          <label>Input image width and height:</label>
+
+          <div class="row">
+            <label for="width" class="col-md-2 control-label">Width:</label>
+            <div class="col-md-8">
+              <input name="width" type="number" class="form-control" ng-model="width" step="10" min="0">
+            </div>
+            <label class="col-md-2 control-label">px</label>
+          </div>
+
+          <div class="row">
+            <label for="height" class="col-md-2 control-label">Height:</label>
+            <div class="col-md-8">
+              <input name="height" type="number" class="form-control" input-lg ng-model="height" step="10" min="0">
+            </div>
+            <label class="col-md-2 control-label">px</label>
+          </div>
         </fieldset>
       </fieldset>
 
-      <fieldset ng-show="serviceType == 'WFS'">
-        <label for="feature">
-          Select the name of the feature type:
-          <select name="feature" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
-        </label>
-        
-        <label for="featureLimit">
-          Maximum number of features for this request:
-          <input name="featureLimit" type="number" ng-model="featureLimit"></input>
-        </label>        
+      <!-- WFS inputs -->
+      <fieldset class="row" ng-show="serviceType == 'WFS'">
+        <fieldset class="col-md-4">
+          <label for="feature">Select the name of the feature type:</label>
+          <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
+        </fieldset>
+       
+        <fieldset class="col-md-3"> 
+          <label for="featureLimit">Maximum number of features returned:</label>
+          <input name="featureLimit" class="form-control" type="number" ng-model="featureLimit"></input>
+        </fieldset>       
       </fieldset>
     </form>
-
-    <p>
-      WMS URL: <a ng-href="{{ url() }}">{{ url() }}</a>
-    </p>
-    <p>
-      <img ng-src="{{ image(200) }}">
-    </p>
+      
+    <!-- WMS/WFS outputs -->
+    <div class="media">
+      <div id="preview-image" class="pull-left">
+        <img class="media-object" ng-src="{{ image(200) }}">
+      </div>
+      <div class="media-body">
+        <p>WMS URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
+      </div>
+    </div>
   </body>
 </html>
