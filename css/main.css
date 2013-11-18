@@ -1,3 +1,14 @@
+header {
+  width: 100%;
+  padding: 15px !important;
+  padding-bottom: 30px !important;
+  margin: 0px !important;
+}
+
+form {
+  padding: 15px;
+}
+
 #map {
   height: 300px;
 }
@@ -9,4 +20,38 @@
 
 #preview-image > img {
   margin: auto;
+}
+
+.glyphicon {
+  margin-left: 5px;
+}
+
+/******************************************************
+* Colours
+*
+* Designed to complement google maps and general
+* naturalistic atlas/map colour schems.
+*
+* Text - #111
+* Body Background - #B3D1FF
+* Other Backgrounds - #F2ECCF, #D5E7C4, #B8D7B4
+******************************************************/
+
+body {
+  color: #111;
+  background-color: hsl(216, 100%, 95%);
+}
+
+header {
+  color: hsl(91, 25%, 22%);
+  background-color: hsl(91, 62%, 84%);
+}
+
+form {
+  background-color: #FAFAFA;
+}
+
+#preview {
+  border: 10px solid #F2ECCF;
+  background-color: #FAFAFA;
 }
