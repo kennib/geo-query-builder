@@ -121,7 +121,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
     });
 
     // Produce an angular request object
-    function request() {
+    function request(overrideParams) {
       window.bbox = $scope.bbox;
       var params = {
         service: $scope.serviceType,
@@ -129,6 +129,9 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         outputFormat: $scope.format,
         format: $scope.format,
       };
+      
+      // Override the paramaters
+      params = angular.extend(params, overrideParams);
 
       if (!$.isEmptyObject($scope.bbox) && params.request != "GetCapabilities") {
         if (params.service == "WMS")
@@ -147,6 +150,9 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         params.maxFeatures = $scope.featureLimit;
       }
 
+      // Override the paramaters
+      params = angular.extend(params, overrideParams);
+
       var request = {
         method: "GET",
         headers: {},
@@ -163,16 +169,19 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       return req.url + "?" + $.param(req.params);
     }
     // Create an image link for the request
-    $scope.image = function() {
+    $scope.image = function(height) {
       // Only map if there are features to map
       if ($scope.features || $scope.freature) {
         var imageParams = {
           service: "WMS",
           request: "GetMap",
-          output: "image/png",
+          outputFormat: "image/png",
+          format: "image/png",
+          width: getImageWidth($scope.bbox, height),
+          height: height,
+          layers: $scope.service=="WMS"? $scope.features : $scope.feature,
         };
-        var req = request();
-        req.params = angular.extend(req.params, imageParams);
+        var req = request(imageParams);
         return req.url + "?" + $.param(req.params);
       } else {
         return "";
@@ -267,6 +276,23 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         $scope.feature = features[0];
       }
     });
+
+    // Get the proportional image width based on bounding box dimensions and given height
+    function getImageWidth(bbox, height) {
+      if (bbox) {
+        var w = Math.abs(bbox.minx - bbox.maxx);
+        var h = Math.abs(bbox.miny - bbox.maxy);
+        var ratio = w/h;
+
+        return parseInt(height * ratio);
+      }
+    }
+    
+    // Update the width when the bbox changes
+    function updateImageWidth(bbox) {
+      $scope.width = getImageWidth($scope.bbox, $scope.height);
+    }
+    $scope.$watch('bbox', updateImageWidth);
   }]);
 
 function initMap() {
