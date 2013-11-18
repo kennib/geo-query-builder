@@ -138,7 +138,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       }
 
       if (params.service == "WMS" && params.request != "GetCapabilities") {
-        params.layers = $scope.feature;
+        params.layers = $scope.features ? $scope.features.join() : undefined;
         params.width = $scope.width;
         params.height = $scope.height;
       }
@@ -238,6 +238,13 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       }
     }
     $scope.$watch('feature', updateBBox);
+
+    // Update the feature when features are selected
+    $scope.$watch('features', function(features) {
+      if (features && features.length > 0) {
+        $scope.feature = features[0];
+      }
+    });
   }]);
 
 function initMap() {
