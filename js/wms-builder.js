@@ -43,8 +43,8 @@ wmsBuilder.service("getCapabilities", ['$http', function($http) {
 wmsBuilder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
-  //"BOM - Geofabric": "http://geofabric.bom.gov.au/simplefeatures",
-  //"Atlas of Living Australia": "http://spatial.ala.org.au/geoserver/web/",
+  "BOM - Geofabric": "http://geofabric.bom.gov.au/simplefeatures",
+  "Atlas of Living Australia": "http://spatial.ala.org.au/geoserver/web/",
 });
 
 wmsBuilder.value("serviceTypes", [
@@ -269,6 +269,8 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         var def = defaults[$scope.serviceType];
         $scope.requestType = def.requestType;
         $scope.format = def.format;
+      }).error(function() {
+        console.log(this, arguments)
       });
     };
 
