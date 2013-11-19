@@ -1,9 +1,9 @@
-var wmsBuilder = angular.module("wms-builder", [
-  "ngRoute", "wms-request",
+var builder = angular.module("builder", [
+  "ngRoute", "builder-request",
 ]);
 
 /* Filter an array by the objects in another array */
-wmsBuilder.filter("isIn", function() {
+builder.filter("isIn", function() {
   function isIn(obj, array) {
     return array.indexOf(obj) != -1;
   };
@@ -32,7 +32,7 @@ wmsBuilder.filter("isIn", function() {
 });
 
 /* Get the capabilities of a WMS/WFS service */
-wmsBuilder.service("getCapabilities", ['$http', function($http) {
+builder.service("getCapabilities", ['$http', function($http) {
   return function(request) {
     request.params.request = "GetCapabilities";
     request.headers["Accept"] = "application/xml";
@@ -40,17 +40,17 @@ wmsBuilder.service("getCapabilities", ['$http', function($http) {
   };
 }]);
 
-wmsBuilder.value("hosts", {
+builder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
 });
 
-wmsBuilder.value("serviceTypes", [
+builder.value("serviceTypes", [
   "WMS",
   "WFS",
 ]);
 
-wmsBuilder.value("defaults", {
+builder.value("defaults", {
   WMS: {
     requestType: "GetMap", 
     format: "image/png",
@@ -61,7 +61,7 @@ wmsBuilder.value("defaults", {
   },
 });
 
-wmsBuilder.controller("builder", ["$scope", "$http",
+builder.controller("builder", ["$scope", "$http",
   "getCapabilities", "geoRequest", "geoImage", "imageWidth",
   "hosts", "serviceTypes", "defaults",
   function($scope, $http, getCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes, defaults) {

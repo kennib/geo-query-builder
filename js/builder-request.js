@@ -1,9 +1,9 @@
-var wmsRequest = angular.module('wms-request', ['wms-utils']);
+var builderRequest = angular.module('builder-request', ['builder-utils']);
 
 /* Produce an angular JSON request object
    for requesting data from WMS/WFS servers */
-wmsRequest.service("geoRequest", function() {
-  return function request(params) {
+builderRequest.service("geoRequest", function() {
+  return function (params) {
     window.bbox = params.bbox;
     var data = {
       service: params.serviceType,
@@ -42,7 +42,7 @@ wmsRequest.service("geoRequest", function() {
 
 /* Produce a URI for the source of an image
    This image is produced from a WMS request */
-wmsRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request, getImageWidth) {
+builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request, getImageWidth) {
   return function(host, features, bbox, height) {
     // Only map if there are features to map
     if (features) {

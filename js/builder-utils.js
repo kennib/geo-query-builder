@@ -1,8 +1,8 @@
-var wmsUtils = angular.module('wms-utils', []);
+var builderUtils = angular.module('builder-utils', []);
 
 /* Get the proportional image width
    based on bounding box dimensions and given height */
-wmsUtils.service('imageWidth', function() {
+builderUtils.service('imageWidth', function() {
   return function imageWidth(bbox, height) {
     if (bbox) {
       var w = Math.abs(bbox.minx - bbox.maxx);
