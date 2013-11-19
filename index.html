@@ -1,5 +1,5 @@
 <!doctype>
-<html ng-app="wms-builder">
+<html ng-app="builder">
   <head>
     <title>WMS Builder</title>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=drawing&sensor=false"></script>
@@ -7,7 +7,12 @@
     <script src="lib/xml2json.js"></script>
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
-    <script src="js/wms-builder.js"></script>
+
+    <script src="js/builder-defaults.js"></script>
+    <script src="js/builder-utils.js"></script>
+    <script src="js/builder-request.js"></script>
+    <script src="js/builder-capabilities.js"></script>
+    <script src="js/builder.js"></script>
 
     <link href='http://fonts.googleapis.com/css?family=Fascinate|Signika:700' rel='stylesheet' type='text/css'>
 
@@ -146,6 +151,19 @@
             <label for="featureLimit">Maximum number of features:</label>
             <input name="featureLimit" class="form-control" type="number" ng-model="featureLimit"></input>
           </fieldset>       
+        </fieldset>
+        
+        <!-- -->
+        <fieldset class="row">
+          <h2>
+            <span class="glyphicon glyphicon-filter"></span>
+            Data Filter
+          </h2>
+          
+          <fieldset class="col-md-8"> 
+            <label for="cql_filter">ECQL filter query:</label>
+            <textarea name="cql_filter" class="form-control" ng-model="cql_filter"></textarea>
+          </fieldset>
         </fieldset>
       </form>
         
