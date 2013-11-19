@@ -110,7 +110,7 @@ builder.controller("builder", ["$scope", "$http",
 
     // Create an image link for the request
     $scope.image = function() {
-      getImageURL($scope.host, ($scope.serviceType == "WMS")? $scope.features : $scope.feature, $scope.bbox, 200);
+      getImageURL($scope, 200);
     };
 
     // Get the capabilities of the current WMS/WFS server selection
