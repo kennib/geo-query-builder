@@ -1,5 +1,5 @@
 var builder = angular.module("builder", [
-  "ngRoute", "builder-request",
+  "ngRoute", "builder-request", "builder-capabilities",
 ]);
 
 /* Filter an array by the objects in another array */
@@ -31,15 +31,6 @@ builder.filter("isIn", function() {
   };
 });
 
-/* Get the capabilities of a WMS/WFS service */
-builder.service("getCapabilities", ['$http', function($http) {
-  return function(request) {
-    request.params.request = "GetCapabilities";
-    request.headers["Accept"] = "application/xml";
-    return $http(request);
-  };
-}]);
-
 builder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
@@ -50,21 +41,11 @@ builder.value("serviceTypes", [
   "WFS",
 ]);
 
-builder.value("defaults", {
-  WMS: {
-    requestType: "GetMap", 
-    format: "image/png",
-  },
-  WFS: {
-    requestType: "GetFeature",
-    format: "json",
-  },
-});
-
 builder.controller("builder", ["$scope", "$http",
-  "getCapabilities", "geoRequest", "geoImage", "imageWidth",
-  "hosts", "serviceTypes", "defaults",
-  function($scope, $http, getCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes, defaults) {
+  "requestCapabilities", "processCapabilities",
+  "geoRequest", "geoImage", "imageWidth",
+  "hosts", "serviceTypes",
+  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -143,69 +124,10 @@ builder.controller("builder", ["$scope", "$http",
       // Get the new capabilities
       var req = request($scope);
 
-      getCapabilities(req).success(function(xml) {
-        if ($scope.serviceType == "WMS") {
-          var cap = $.xml2json(xml).Capability;
-          var requestTypes = cap.Request;
-          for (var rt in requestTypes) {
-            var formats = requestTypes[rt].Format;
-
-            if (typeof(formats) != typeof([]))
-              requestTypes[rt].formats = [formats];
-            else
-              requestTypes[rt].formats = formats;
-          }
-          var layers = [];
-          var Layer = cap.Layer.Layer;
-          for (var l in Layer) {
-            var layer = {
-              bbox: Layer[l].BoundingBox[0],
-              name: Layer[l].Name,
-            };
-            layers[layer.name] = layer;
-          }
-
-          $scope.requestTypes = requestTypes;
-          $scope.featureList = layers;
-        }
-        if ($scope.serviceType == "WFS") {
-          var requestTypes = {};
-          $(xml)
-            .find('ows\\:operationsmetadata')
-            .children('ows\\:operation')
-            .each(function() {
-              var op = $(this);
-              var name = op.attr("name");
-              var formats = [];
-              op.find('ows\\:parameter[name="outputFormat"]')
-                .children().children().each(function() {
-                  formats.push($(this).text());
-                });
-              requestTypes[name] = {formats: formats};
-            });
-
-          var featureTypes = [];
-          $(xml)
-            .find('featuretypelist')
-            .children('featuretype')
-            .each(function() {
-              var feature = $(this);
-              var name = feature .children('name').text();
-              var box = feature.children('ows\\:wgs84boundingbox');
-              var min = box.children('ows\\:lowercorner').text().split(' ');
-              var max = box.children('ows\\:uppercorner').text().split(' ');
-              var bbox = {minx: min[0], maxx: max[0], miny: min[1], maxy: max[1]};
-              featureTypes[name] = {name: name, bbox: bbox};
-            });
-
-          $scope.requestTypes = requestTypes;
-          $scope.featureList = featureTypes;
-        }
-
-        // Set new defaults
-        var def = defaults[$scope.serviceType];
-        $scope.requestType = def.requestType;
-        $scope.format = def.format;
+      requestCapabilities(req).success(function(xml) {
+        // Apply capabilities to the scope
+        var cap = processCapabilities($scope.serviceType, xml);
+        angular.extend($scope, cap);
       });
     };
 
