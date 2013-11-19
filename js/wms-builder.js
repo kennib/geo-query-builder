@@ -1,5 +1,5 @@
 var wmsBuilder = angular.module("wms-builder", [
-  "ngRoute",
+  "ngRoute", "wms-request",
 ]);
 
 /* Filter an array by the objects in another array */
@@ -43,8 +43,6 @@ wmsBuilder.service("getCapabilities", ['$http', function($http) {
 wmsBuilder.value("hosts", {
   "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
   "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
-  //"BOM - Geofabric": "http://geofabric.bom.gov.au/simplefeatures",
-  //"Atlas of Living Australia": "http://spatial.ala.org.au/geoserver/web/",
 });
 
 wmsBuilder.value("serviceTypes", [
@@ -64,9 +62,9 @@ wmsBuilder.value("defaults", {
 });
 
 wmsBuilder.controller("builder", ["$scope", "$http",
-  "getCapabilities",
+  "getCapabilities", "geoRequest", "geoImage", "imageWidth",
   "hosts", "serviceTypes", "defaults",
-  function($scope, $http, getCapabilities, hosts, serviceTypes, defaults) {
+  function($scope, $http, getCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes, defaults) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -122,78 +120,17 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       }
     });
 
-    // Produce an angular request object
-    function request(overrideParams) {
-      window.bbox = $scope.bbox;
-      var params = {
-        service: $scope.serviceType,
-        request: $scope.requestType,
-        outputFormat: $scope.format,
-        format: $scope.format,
-      };
-      
-      // Override the paramaters
-      params = angular.extend(params, overrideParams);
-
-      if (!$.isEmptyObject($scope.bbox) && params.request != "GetCapabilities") {
-        if (params.service == "WMS")
-          params.bbox = [$scope.bbox.minx, $scope.bbox.miny, $scope.bbox.maxx, $scope.bbox.maxy].join();
-        if (params.service == "WFS")
-          params.bbox = [$scope.bbox.miny, $scope.bbox.minx, $scope.bbox.maxy, $scope.bbox.maxx].join();
-      }
-
-      if (params.service == "WMS" && params.request != "GetCapabilities") {
-        params.layers = $scope.features ? $scope.features.join() : undefined;
-        params.width = $scope.width;
-        params.height = $scope.height;
-      }
-      if (params.service == "WFS" && params.request != "GetCapabilities") {
-        params.typeName = $scope.feature;
-        params.maxFeatures = $scope.featureLimit;
-      }
-
-      // Override the paramaters
-      params = angular.extend(params, overrideParams);
-
-      var request = {
-        method: "GET",
-        headers: {},
-        url: $scope.host + "/ows",
-        params: params,
-      };
-
-      return request;
-    }
 
     // Create a URL for the request
     $scope.url = function(override) {
-      var req = request();
+      var req = request($scope);
       return req.url + "?" + $.param(req.params);
     }
 
     // Create an image link for the request
-    $scope.image = function(height) {
-      // Only map if there are features to map
-      if ($scope.features || $scope.feature) {
-        $("#preview-image img").attr("src", "images/loading.gif");
-        $scope.loading = true;
-
-        var imageParams = {
-          service: "WMS",
-          request: "GetMap",
-          outputFormat: "image/png",
-          format: "image/png",
-          width: getImageWidth($scope.bbox, height),
-          height: height,
-          layers: ($scope.serviceType=="WMS")? $scope.features.join() : $scope.feature,
-        };
-        var req = request(imageParams);
-        var src = req.url + "?" + $.param(req.params);
-        $("#preview-image img").attr("src", src);
-      } else {
-        return "";
-      }
-    }
+    $scope.image = function() {
+      getImageURL($scope.host, ($scope.serviceType == "WMS")? $scope.features : $scope.feature, $scope.bbox, 200);
+    };
 
     // Get the capabilities of the current WMS/WFS server selection
     function updateCapabilities(updated) {
@@ -204,7 +141,7 @@ wmsBuilder.controller("builder", ["$scope", "$http",
       }
 
       // Get the new capabilities
-      var req = request();
+      var req = request($scope);
 
       getCapabilities(req).success(function(xml) {
         if ($scope.serviceType == "WMS") {
@@ -291,17 +228,6 @@ wmsBuilder.controller("builder", ["$scope", "$http",
         $scope.feature = features[0];
       }
     });
-
-    // Get the proportional image width based on bounding box dimensions and given height
-    function getImageWidth(bbox, height) {
-      if (bbox) {
-        var w = Math.abs(bbox.minx - bbox.maxx);
-        var h = Math.abs(bbox.miny - bbox.maxy);
-        var ratio = w/h;
-
-        return parseInt(height * ratio);
-      }
-    }
     
     // Update the width when the bbox changes
     function updateImageWidth(bbox) {
