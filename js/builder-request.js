@@ -56,7 +56,7 @@ builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request
         format: "image/png",
         width: getImageWidth(bbox, height),
         height: height,
-        features: features,
+        features: (typeof(features) == typeof([]))? features : [features],
         bbox: bbox,
       };
 
