@@ -177,8 +177,17 @@
           <img class="media-object img-thumbnail" ng-src="{{ image(200) }}">
         </div>
         <div class="media-body">
-          <p>WMS URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
         </div>
+      </div>
+
+      <!-- Request outputs -->
+      <div id="request" class="row">
+        <h2>
+          <span class="glyphicon glyphicon-log-in"></span>
+          Request
+        </h2>
+        <p>Request URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
+        <p>Request JSON: <pre>{{ request() | json}}</pre></p>
       </div>
     </div>
   </body>

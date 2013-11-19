@@ -65,6 +65,11 @@ builder.controller("builder", ["$scope", "$http",
 
     $scope.featureLimit = 50;
 
+    // Function to generate a request
+    $scope.request = function() {
+      return request($scope);
+    };
+
     // Initialize the Google map
     var map = initMap();
     // Update bounds on map rectangle update
