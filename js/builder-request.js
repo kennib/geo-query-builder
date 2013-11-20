@@ -72,3 +72,47 @@ builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request
     }
   };
 }]);
+
+/*Request the properties of a feature set
+   This feature set is produced from a WFS request*/
+builderRequest.service('geoFeatureInfo', ['$http', 'geoRequest', function($http, request) {
+  return function(params) {
+    var featureInfoParams = {
+      host: params.host,
+      serviceType: "WFS",
+      requestType: "DescribeFeatureType",
+      feature: params.feature,
+    };
+    var req = request(featureInfoParams);
+    return $http(req);
+  }
+}]);
+
+/* Produce a JSON object encoding the properties of a feature set
+   Created from an xml string */
+builderRequest.service('processFeatureInfo', [function() {
+  return function(xml) {
+    var info = {};
+    var infoxml = $(xml);
+    // Get the list of features
+    var features = infoxml.find('xsd\\:complexType');
+    
+    features.each(function(feature) {
+      feature = $(this);
+      var f = {};
+      info[feature.attr("name")] = f;
+      
+      // Get the list of properties for a feature
+      var props = feature.find('xsd\\:element');
+      props.each(function(prop) {
+        var prop = $(this);
+        var name = prop.attr("name");
+        var type = prop.attr("type");
+        f[name] = {name: name, type: type};
+      });
+      
+    });
+
+    return info;
+  };
+}]);

@@ -177,6 +177,7 @@
           <img class="media-object img-thumbnail" ng-src="{{ image(200) }}">
         </div>
         <div class="media-body">
+          <pre>{{ featureInfo | json }}</pre>
         </div>
       </div>
 
@@ -187,7 +188,7 @@
           Request
         </h2>
         <p>Request URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
-        <p>Request JSON: <pre>{{ request() | json}}</pre></p>
+        <p>Request JSON: <pre>{{ request() | json }}</pre></p>
       </div>
     </div>
   </body>

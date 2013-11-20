@@ -43,9 +43,9 @@ builder.value("serviceTypes", [
 
 builder.controller("builder", ["$scope", "$http",
   "requestCapabilities", "processCapabilities",
-  "geoRequest", "geoImage", "imageWidth",
+  "geoRequest", "geoImage", "geoFeatureInfo", "processFeatureInfo", "imageWidth",
   "hosts", "serviceTypes",
-  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes) {
+  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getFeatureInfo, processFeatureInfo, getImageWidth, hosts, serviceTypes) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -69,6 +69,13 @@ builder.controller("builder", ["$scope", "$http",
     $scope.request = function() {
       return request($scope);
     };
+
+    // Update feature info when feature is changed
+    $scope.$watch('feature', function() {
+      getFeatureInfo($scope).success(function(xml) {
+        $scope.featureInfo = processFeatureInfo(xml);
+      });
+    });
 
     // Initialize the Google map
     var map = initMap();
