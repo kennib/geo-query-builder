@@ -7,8 +7,6 @@ builderRequest.service("geoRequest", function() {
     var data = {
       service: params.serviceType,
       request: params.requestType,
-      outputFormat: params.format,
-      format: params.format,
     };
 
     if (params.cql_filter) {
@@ -26,10 +24,12 @@ builderRequest.service("geoRequest", function() {
       data.layers = params.features ? params.features.join() : undefined;
       data.width = params.width;
       data.height = params.height;
+      data.format = params.format;
     }
     if (data.service == "WFS" && data.request != "GetCapabilities") {
       data.typeName = params.feature;
       data.maxFeatures = params.featureLimit;
+      data.outputFormat = params.format;
     }
 
     var request = {
