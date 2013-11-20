@@ -1,7 +1,7 @@
 <!doctype>
 <html ng-app="builder">
   <head>
-    <title>WMS Builder</title>
+    <title>Geo Query Builder</title>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=drawing&sensor=false"></script>
     <script src="lib/jquery-2.0.3.min.js"></script>
     <script src="lib/xml2json.js"></script>
@@ -25,7 +25,7 @@
     <div class="container">
       <!-- Header -->
       <header class="page-header">
-        <h1>WMS Builder</h1>
+        <h1>Geo Query Builder</h1>
       </header>
 
       <form role="form">
@@ -168,17 +168,43 @@
       </form>
         
       <!-- WMS/WFS outputs -->
-      <div id="preview" class="media">
+      <div id="preview" class="row">
         <h2>
           <span class="glyphicon glyphicon-eye-open"></span>
           Data Preview
         </h2>
-        <div id="preview-image" class="pull-left">
-          <img class="media-object img-thumbnail" ng-src="{{ image(200) }}">
+        <div class="row">
+          <figure id="preview-image" class="col-md-4">
+            <h3>Image preview</h3>
+            <img class="img-thumbnail" ng-src="{{ image(200) }}">
+          </figure>
+
+          <div class="col-md-6">
+            <h3>Feature properties</h3>
+
+            <table class="table" ng-repeat="(featureName, feature) in featureInfo | isIn:features">
+            <thead>
+              <tr><th colspan="2">{{ featureName }}</th></tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="property in feature">
+                <td>{{ property.name }}</td> 
+                <td>{{ property.type }}</td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
         </div>
-        <div class="media-body">
-          <p>WMS URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
-        </div>
+      </div>
+
+      <!-- Request outputs -->
+      <div id="request" class="row">
+        <h2>
+          <span class="glyphicon glyphicon-log-in"></span>
+          Request
+        </h2>
+        <p>Request URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
+        <p>Request JSON: <pre>{{ request() | json }}</pre></p>
       </div>
     </div>
   </body>

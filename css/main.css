@@ -19,12 +19,16 @@ form {
   padding: 15px;
 }
 
-form, #preview {
+form, .container > div {
   margin: 0px;
 }
 
 #map {
   height: 300px;
+}
+
+#preview > .row {
+  padding-left: 15px;
 }
 
 #preview-image {
@@ -72,7 +76,10 @@ form {
   background-color: white;
 }
 
+.container > div {
+  background-color: white;
+}
+
 #preview {
   border: solid 5px hsl(91, 65%, 85%);
-  background-color: white;
 }

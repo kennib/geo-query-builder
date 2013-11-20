@@ -7,8 +7,6 @@ builderRequest.service("geoRequest", function() {
     var data = {
       service: params.serviceType,
       request: params.requestType,
-      outputFormat: params.format,
-      format: params.format,
     };
 
     if (params.cql_filter) {
@@ -26,10 +24,12 @@ builderRequest.service("geoRequest", function() {
       data.layers = params.features ? params.features.join() : undefined;
       data.width = params.width;
       data.height = params.height;
+      data.format = params.format;
     }
     if (data.service == "WFS" && data.request != "GetCapabilities") {
       data.typeName = params.feature;
       data.maxFeatures = params.featureLimit;
+      data.outputFormat = params.format;
     }
 
     var request = {
@@ -70,5 +70,50 @@ builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request
     } else {
       return "";
     }
+  };
+}]);
+
+/*Request the properties of a feature set
+   This feature set is produced from a WFS request*/
+builderRequest.service('geoFeatureInfo', ['$http', 'geoRequest', function($http, request) {
+  return function(params) {
+    var featureInfoParams = {
+      host: params.host,
+      serviceType: "WFS",
+      requestType: "DescribeFeatureType",
+      feature: params.feature,
+    };
+    var req = request(featureInfoParams);
+    return $http(req);
+  }
+}]);
+
+/* Produce a JSON object encoding the properties of a feature set
+   Created from an xml string */
+builderRequest.service('processFeatureInfo', [function() {
+  return function(xml) {
+    var info = {};
+    var infoxml = $(xml);
+    // Get the list of features
+    var features = infoxml.find('xsd\\:complexType');
+    
+    features.each(function(feature) {
+      feature = $(this);
+      var f = {};
+      var featureName = feature.next().attr("type").replace(/Type$/, '');
+      info[featureName] = f;
+      
+      // Get the list of properties for a feature
+      var props = feature.find('xsd\\:element');
+      props.each(function(prop) {
+        var prop = $(this);
+        var name = prop.attr("name");
+        var type = prop.attr("type");
+        f[name] = {name: name, type: type};
+      });
+      
+    });
+
+    return info;
   };
 }]);

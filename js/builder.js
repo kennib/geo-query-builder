@@ -5,7 +5,7 @@ var builder = angular.module("builder", [
 /* Filter an array by the objects in another array */
 builder.filter("isIn", function() {
   function isIn(obj, array) {
-    return array.indexOf(obj) != -1;
+    return array && (array.indexOf(obj) != -1 || array[obj] !== undefined);
   };
 
   return function(obj, filterArray) {
@@ -43,9 +43,9 @@ builder.value("serviceTypes", [
 
 builder.controller("builder", ["$scope", "$http",
   "requestCapabilities", "processCapabilities",
-  "geoRequest", "geoImage", "imageWidth",
+  "geoRequest", "geoImage", "geoFeatureInfo", "processFeatureInfo", "imageWidth",
   "hosts", "serviceTypes",
-  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getImageWidth, hosts, serviceTypes) {
+  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getFeatureInfo, processFeatureInfo, getImageWidth, hosts, serviceTypes) {
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -64,6 +64,18 @@ builder.controller("builder", ["$scope", "$http",
     $scope.height = 200;
 
     $scope.featureLimit = 50;
+
+    // Function to generate a request
+    $scope.request = function() {
+      return request($scope);
+    };
+
+    // Update feature info when feature is changed
+    $scope.$watch('host', function() {
+      getFeatureInfo($scope).success(function(xml) {
+        $scope.featureInfo = processFeatureInfo(xml);
+      });
+    });
 
     // Initialize the Google map
     var map = initMap();
@@ -148,6 +160,12 @@ builder.controller("builder", ["$scope", "$http",
     $scope.$watch('features', function(features) {
       if (features && features.length > 0) {
         $scope.feature = features[0];
+      }
+    });
+    // Update the features when a feature is selected
+    $scope.$watch('feature', function(feature) {
+      if (feature) {
+        $scope.features = [feature];
       }
     });
     
