@@ -162,6 +162,12 @@ builder.controller("builder", ["$scope", "$http",
         $scope.feature = features[0];
       }
     });
+    // Update the features when a feature is selected
+    $scope.$watch('feature', function(feature) {
+      if (feature) {
+        $scope.features = [feature];
+      }
+    });
     
     // Update the width when the bbox changes
     function updateImageWidth(bbox) {
