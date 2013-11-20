@@ -27,6 +27,10 @@ form, .container > div {
   height: 300px;
 }
 
+#preview > .row {
+  padding-left: 15px;
+}
+
 #preview-image {
   min-width: 400px;
   min-height: 200px;
