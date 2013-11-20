@@ -100,7 +100,8 @@ builderRequest.service('processFeatureInfo', [function() {
     features.each(function(feature) {
       feature = $(this);
       var f = {};
-      info[feature.attr("name")] = f;
+      var featureName = feature.next().attr("type").replace(/Type$/, '');
+      info[featureName] = f;
       
       // Get the list of properties for a feature
       var props = feature.find('xsd\\:element');

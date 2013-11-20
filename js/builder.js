@@ -5,7 +5,7 @@ var builder = angular.module("builder", [
 /* Filter an array by the objects in another array */
 builder.filter("isIn", function() {
   function isIn(obj, array) {
-    return array.indexOf(obj) != -1;
+    return array.indexOf(obj) != -1 || array[obj] !== undefined;
   };
 
   return function(obj, filterArray) {
@@ -71,7 +71,7 @@ builder.controller("builder", ["$scope", "$http",
     };
 
     // Update feature info when feature is changed
-    $scope.$watch('feature', function() {
+    $scope.$watch('host', function() {
       getFeatureInfo($scope).success(function(xml) {
         $scope.featureInfo = processFeatureInfo(xml);
       });

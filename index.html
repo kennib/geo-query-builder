@@ -177,7 +177,7 @@
           <img class="media-object img-thumbnail" ng-src="{{ image(200) }}">
         </div>
         <div class="media-body">
-          <pre>{{ featureInfo | json }}</pre>
+          <pre>{{ featureInfo | isIn:features | json }}</pre>
         </div>
       </div>
 
