@@ -187,7 +187,8 @@ function initMap() {
 
   var rectangle = new google.maps.Rectangle({
     bounds: new google.maps.LatLngBounds(),
-    editable: true
+    editable: true,
+    draggable: true,
   });
 
   rectangle.setMap(map);
