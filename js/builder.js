@@ -32,8 +32,9 @@ builder.filter("isIn", function() {
 });
 
 builder.value("hosts", {
-  "NICTA - GeoTopo250K": "http://geospace.research.nicta.com.au:8080/geotopo_250k",
-  "NICTA - Admin Bounds": "http://geospace.research.nicta.com.au:8080/admin_bnds",
+  "NICTA - GeoTopo250K": "http://envirohack.research.nicta.com.au/geotopo_250k",
+  "NICTA - Admin Bounds": "http://envirohack.research.nicta.com.au/admin_bnds_abs",
+  "NICTA - FSDF": "http://envirohack.research.nicta.com.au/fsdf",
 });
 
 builder.value("serviceTypes", [
