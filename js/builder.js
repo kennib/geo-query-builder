@@ -44,12 +44,12 @@ builder.value("serviceTypes", [
 
 builder.controller("builder", ["$scope", "$http",
   "requestCapabilities", "processCapabilities",
-  "geoRequest", "geoImage", "geoFeatureInfo", "processFeatureInfo",
+  "geoRequest", "geoCURL", "geoImage", "geoFeatureInfo", "processFeatureInfo",
   "imageWidth", "imageHeight",
   "hosts", "serviceTypes",
   function($scope, $http,
     requestCapabilities, processCapabilities,
-    request, getImageURL, getFeatureInfo, processFeatureInfo,
+    request, getCURL, getImageURL, getFeatureInfo, processFeatureInfo,
     getImageWidth, getImageHeight,
     hosts, serviceTypes
   ) {
@@ -124,6 +124,10 @@ builder.controller("builder", ["$scope", "$http",
       }
     });
 
+    // Create curl text
+    $scope.CURL = function() {
+      return getCURL($scope);
+    }
 
     // Create a URL for the request
     $scope.url = function(override) {

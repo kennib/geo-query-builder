@@ -43,6 +43,22 @@ builderRequest.service("geoRequest", function() {
   };
 });
 
+/* Produce an angular JSON request object
+   for requesting data from WMS/WFS servers */
+builderRequest.service("geoCURL", ["geoRequest", function(geoRequest) {
+  return function(params) {
+    var req = geoRequest(params);
+    var curl = "curl " + req.url + " --get";
+
+    for (var key in req.params) {
+      curl += " -d ";
+      curl += JSON.stringify(key + "=" + req.params[key]);
+    }
+
+    return curl;
+  };
+}]);
+
 /* Produce a URI for the source of an image
    This image is produced from a WMS request */
 builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request, getImageWidth) {
