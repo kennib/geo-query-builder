@@ -32,6 +32,26 @@ builderRequest.service("geoRequest", function() {
       data.outputFormat = params.format;
     }
 
+    // Get a list of properties to include
+    if (params.featureInfo) {
+      var props = [], numProperties = 0;
+
+      // Get the properties of each feature
+      for (var f in params.features) {
+        var feature = params.features[f];
+        var properties = params.featureInfo[feature];
+        for (var p in properties) {
+          var prop = properties[p]
+          numProperties++;
+          if (prop.include)
+            props.push(prop.name)
+        }
+      }
+
+      if (numProperties != props.length)
+        data.propertyName = props.join(',');
+    }
+
     var request = {
       method: "GET",
       headers: {},
@@ -128,7 +148,7 @@ builderRequest.service('processFeatureInfo', [function() {
         var prop = $(this);
         var name = prop.attr("name");
         var type = prop.attr("type");
-        f[name] = {name: name, type: type};
+        f[name] = {name: name, type: type, include: true};
       });
       
     });
