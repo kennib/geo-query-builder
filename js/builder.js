@@ -17,17 +17,6 @@ builder.filter("isIn", function() {
     }
 
     return newObj;
-
-    /*
-    var newArray = [];
-
-    array.forEach(function(obj) {
-      if (isIn(obj, filterArray))
-        newArray.push(obj);
-    });
-
-    return newArray;
-    */
   };
 });
 
