@@ -129,10 +129,12 @@ builder.controller("builder", ["$scope", "$http",
     // Get the capabilities of the current WMS/WFS server selection
     function updateCapabilities(updated) {
       // Reset old features if there is a new host
-      if ($scope.host == updated) {
+      if (updated && $scope.host == updated) {
         $scope.features = undefined;
         $scope.feature = undefined;
         $scope.featureList = undefined;
+        
+        $scope.requestTypes = undefined;
       }
 
       // Get the new capabilities
@@ -144,6 +146,7 @@ builder.controller("builder", ["$scope", "$http",
           $scope.capabilitiesError = null;
         }).error(function(error) {
           $scope.capabilitiesError = error? error : "Unable to retrieve the server's capabilities.";
+
         });
       }
     };
@@ -151,8 +154,8 @@ builder.controller("builder", ["$scope", "$http",
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
 
-    // Update the list of features for this host
-    $scope.$watch('host', function() {
+    // Update the list of features for this service
+    $scope.$watch('serviceType', function() {
       getFeatureInfo($scope).success(function(xml) {
         $scope.featureInfo = processFeatureInfo(xml);
         $scope.capabilitiesError = null;
