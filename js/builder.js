@@ -23,7 +23,7 @@ builder.filter("isIn", function() {
 builder.value("hosts", {
   "NICTA - GeoTopo250K": "http://envirohack.research.nicta.com.au/geotopo_250k",
   "NICTA - Admin Bounds": "http://envirohack.research.nicta.com.au/admin_bnds_abs",
-  "NICTA - FSDF": "http://envirohack.research.nicta.com.au/fsdf",
+  "NICTA - FSDF Administrative Units": "http://envirohack.research.nicta.com.au/fsdf",
   "Atlas of Living Australia": "http://spatial.ala.org.au/geoserver/ALA",
 });
 
