@@ -160,7 +160,7 @@ builder.controller("builder", ["$scope", "$http",
 
     // Update the bounding box based on the layer/feature selection
     function updateBBox(feature) {
-      if (feature) {
+      if (feature && $scope.updateBbox) {
         var bbox = $scope.featureList[feature].bbox;
         $scope.bbox = bbox;
       }

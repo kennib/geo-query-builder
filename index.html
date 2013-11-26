@@ -94,6 +94,13 @@
                 <input name="maxx" class="form-control" ng-model="bbox.maxx">
               </div>
             </div>
+
+            <div class="row">
+              <label for="updateBbox" class="col-md-8 control-label">Change bounding box to match layer/feature type selection</label>
+              <div class="col-md-2">
+                <input name="updateBbox" id="updateBbox" type="checkbox" ng-model="updateBbox" ng-init="updateBbox = true"></input>
+              </div>
+            </div>
           </fieldset>
 
           <fieldset class="col-md-6">
