@@ -24,6 +24,7 @@ builder.value("hosts", {
   "NICTA - GeoTopo250K": "http://envirohack.research.nicta.com.au/geotopo_250k",
   "NICTA - Admin Bounds": "http://envirohack.research.nicta.com.au/admin_bnds_abs",
   "NICTA - FSDF": "http://envirohack.research.nicta.com.au/fsdf",
+  "Atlas of Living Australia": "http://spatial.ala.org.au/geoserver/ALA",
 });
 
 builder.value("serviceTypes", [
@@ -69,13 +70,6 @@ builder.controller("builder", ["$scope", "$http",
     $scope.request = function() {
       return request($scope);
     };
-
-    // Update feature info when feature is changed
-    $scope.$watch('host', function() {
-      getFeatureInfo($scope).success(function(xml) {
-        $scope.featureInfo = processFeatureInfo(xml);
-      });
-    });
 
     // Initialize the Google map
     var map = initMap();
@@ -135,21 +129,35 @@ builder.controller("builder", ["$scope", "$http",
       if ($scope.host == updated) {
         $scope.features = undefined;
         $scope.feature = undefined;
+        $scope.featureList = undefined;
       }
 
       // Get the new capabilities
-      var req = request($scope);
-
-      requestCapabilities(req).success(function(xml) {
-        // Apply capabilities to the scope
-        var cap = processCapabilities($scope.serviceType, xml);
-        angular.extend($scope, cap);
-      });
+      if ($scope.host) {
+        requestCapabilities($scope).success(function(xml) {
+          // Apply capabilities to the scope
+          var cap = processCapabilities($scope.serviceType, xml);
+          angular.extend($scope, cap);
+          $scope.capabilitiesError = null;
+        }).error(function(error) {
+          $scope.capabilitiesError = error? error : "Unable to retrieve the server's capabilities.";
+        });
+      }
     };
 
     // Update capabilities if the host or service type changes
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
+
+    // Update the list of features for this host
+    $scope.$watch('host', function() {
+      getFeatureInfo($scope).success(function(xml) {
+        $scope.featureInfo = processFeatureInfo(xml);
+        $scope.capabilitiesError = null;
+      }).error(function(error) {
+        $scope.capabilitiesError = error? error: "Unable to retreive the feature's properties";
+      });
+    });
 
     // Update the bounding box based on the layer/feature selection
     function updateBBox(feature) {

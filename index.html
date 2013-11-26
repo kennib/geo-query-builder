@@ -29,12 +29,17 @@
       </header>
 
       <form role="form">
+
         <!-- General inputs -->
         <fieldset class="row">
           <h2>
             <span class="glyphicon glyphicon-cog"></span>
             Service settings
           </h2>
+
+          <div class="alert alert-danger" ng-show="capabilitiesError">
+            {{ capabilitiesError }}
+          </div>
 
           <fieldset class="col-md-3">
             <label for="host">Select a WMS server:</label>
@@ -219,6 +224,7 @@
           <span class="glyphicon glyphicon-log-in"></span>
           Request
         </h2>
+
         <p>Request URL: <a ng-href="{{ url() }}">{{ url() }}</a></p>
         <p>Request JSON: <pre>{{ request() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>

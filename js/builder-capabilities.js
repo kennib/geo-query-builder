@@ -2,10 +2,17 @@ var builderCap = angular.module('builder-capabilities', ['builder-request', 'bui
 
 /* Get the capabilities of a WMS/WFS service */
 builderCap.service("requestCapabilities", ['$http', 'geoRequest',  function($http, request) {
-  return function(request) {
-    request.params.request = "GetCapabilities";
-    request.headers["Accept"] = "application/xml";
-    return $http(request);
+  return function(params) {
+    var cap = {
+      host: params.host,
+      serviceType: params.serviceType,
+      requestType: "GetCapabilities",
+    };
+
+    var req = request(cap);
+    req.timeout = 2000; // timeout after 2 seconds
+
+    return $http(req);
   };
 }]);
 
