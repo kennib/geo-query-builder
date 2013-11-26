@@ -52,7 +52,7 @@
           </fieldset>
 
           <fieldset class="col-md-3">
-          <label for="format">Select an output format</label>  
+          <label for="format">Select an output format:</label>  
             <select name="format" class="form-control" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
           </fieldset>
         </fieldset>
@@ -117,7 +117,7 @@
 
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': features}">
             <label for="layers" class="control-label">Select the layers to request:</label>
-            <select name="layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
+            <select name="layers" id="wms-layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
               multiple="multiple" multiselect-dropdown required></select>
            </fieldset>
 
@@ -176,7 +176,7 @@
           
           <fieldset class="col-md-8"> 
             <label for="cql_filter">ECQL filter query:</label>
-            <textarea name="cql_filter" class="form-control" ng-model="cql_filter"></textarea>
+            <textarea name="cql_filter" id="ecql-filter" class="form-control" ng-model="cql_filter"></textarea>
           </fieldset>
         </fieldset>
 

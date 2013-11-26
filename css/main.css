@@ -27,6 +27,14 @@ form, .container > div {
   height: 300px;
 }
 
+#wms-layers {
+  height: 200px;
+}
+
+#ecql-filter {
+  height: 120px;
+}
+
 #preview > .row {
   padding-left: 15px;
 }
