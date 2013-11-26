@@ -42,23 +42,32 @@
           </div>
 
           <fieldset class="col-md-3">
-            <label for="host">Select a WMS server:</label>
+            <label for="host">WMS server:</label>
             <select name="host" class="form-control" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
+            <input class="form-control" ng-model="host" ng-show="manualEntry"></input>
           </fieldset>
 
-          <fieldset class="col-md-3">
-          <label for="serviceType">Select a service type:</label>
+          <fieldset class="col-md-2">
+            <label for="serviceType">Service type:</label>
             <select name="serviceType" class="form-control" ng-model="serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
+            <input class="form-control" ng-model="serviceType" ng-show="manualEntry"></input>
           </fieldset>
 
-          <fieldset class="col-md-3">
-          <label for="requestType">Select a request type:</label> 
+          <fieldset class="col-md-2">
+            <label for="requestType">Request type:</label> 
             <select name="requestType" class="form-control" ng-model="requestType" ng-options="requestType as requestType for (requestType, request) in requestTypes"></select>
+            <input class="form-control" ng-model="requestType" ng-show="manualEntry"></input>
           </fieldset>
 
           <fieldset class="col-md-3">
-          <label for="format">Select an output format:</label>  
+            <label for="format">Output format:</label>  
             <select name="format" class="form-control" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
+            <input class="form-control" ng-model="format" ng-show="manualEntry"></input>
+          </fieldset>
+          
+          <fieldset class="col-md-2">
+            <label for="manualEntry">Manual inputs?</label>
+            <input name="manualEntry" id="manualEntry" type="checkbox" ng-model="manualEntry"></input>
           </fieldset>
         </fieldset>
 
@@ -124,6 +133,7 @@
             <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" id="wms-layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
               multiple="multiple" multiselect-dropdown required></select>
+            <input class="form-control" ng-model="feature" ng-show="manualEntry"></input>
            </fieldset>
 
           <fieldset class="col-md-4">
@@ -164,6 +174,7 @@
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
+            <input class="form-control" ng-model="feature" ng-show="manualEntry"></input>
           </fieldset>
          
           <fieldset class="col-md-3"> 

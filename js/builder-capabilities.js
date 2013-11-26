@@ -7,10 +7,10 @@ builderCap.service("requestCapabilities", ['$http', 'geoRequest',  function($htt
       host: params.host,
       serviceType: params.serviceType,
       requestType: "GetCapabilities",
+      timeout: params.timeout,
     };
 
     var req = request(cap);
-    req.timeout = 2000; // timeout after 2 seconds
 
     return $http(req);
   };

@@ -50,6 +50,9 @@ builder.controller("builder", ["$scope", "$http",
     $scope.serviceTypes = serviceTypes;
     $scope.serviceType = serviceTypes[0];
 
+    $scope.manualEntry = false;
+    $scope.timeout = 3000; // 3 seconds
+
     // Default to Australian bounds
     $scope.bbox = {
       minx: 96.816941408,
@@ -144,7 +147,6 @@ builder.controller("builder", ["$scope", "$http",
         });
       }
     };
-
     // Update capabilities if the host or service type changes
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);

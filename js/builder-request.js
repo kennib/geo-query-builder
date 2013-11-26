@@ -37,6 +37,7 @@ builderRequest.service("geoRequest", function() {
       headers: {},
       url: params.host + "/ows",
       params: data,
+      timeout: params.timeout,
     };
 
     return request;
