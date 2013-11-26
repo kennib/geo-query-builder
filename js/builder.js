@@ -44,9 +44,16 @@ builder.value("serviceTypes", [
 
 builder.controller("builder", ["$scope", "$http",
   "requestCapabilities", "processCapabilities",
-  "geoRequest", "geoImage", "geoFeatureInfo", "processFeatureInfo", "imageWidth",
+  "geoRequest", "geoImage", "geoFeatureInfo", "processFeatureInfo",
+  "imageWidth", "imageHeight",
   "hosts", "serviceTypes",
-  function($scope, $http, requestCapabilities, processCapabilities, request, getImageURL, getFeatureInfo, processFeatureInfo, getImageWidth, hosts, serviceTypes) {
+  function($scope, $http,
+    requestCapabilities, processCapabilities,
+    request, getImageURL, getFeatureInfo, processFeatureInfo,
+    getImageWidth, getImageHeight,
+    hosts, serviceTypes
+  ) {
+
     $scope.hosts = hosts;
     $scope.host = hosts["NICTA - Admin Bounds"];
 
@@ -61,8 +68,11 @@ builder.controller("builder", ["$scope", "$http",
       maxy: -9.142175976703609,
     };
 
-    $scope.width = 200;
-    $scope.height = 200;
+    $scope.image = {
+      width: 200,
+      height: 200,
+      proportional: true,
+    };
 
     $scope.featureLimit = 50;
 
@@ -122,7 +132,7 @@ builder.controller("builder", ["$scope", "$http",
     }
 
     // Create an image link for the request
-    $scope.image = function() {
+    $scope.imageURL = function() {
       getImageURL($scope, 200);
     };
 
@@ -170,11 +180,30 @@ builder.controller("builder", ["$scope", "$http",
       }
     });
     
-    // Update the width when the bbox changes
-    function updateImageWidth(bbox) {
-      $scope.width = getImageWidth($scope.bbox, $scope.height);
+    // Update the width when the height or bbox changes
+    // Update the height when the width changes
+    function updateImageDimensions(newimg, oldimg) {
+      newimg = angular.copy(newimg); // avoid changing the newimg data
+
+      if (oldimg && $scope.image.proportional && !$scope.autoResizing) {
+        var bboxChanged = newimg.width === undefined;
+        var propChanged = newimg.proportional !== oldimg.proportional;
+
+        // Update height if width changed or bbox is changed or propotionality changed
+        if (bboxChanged || propChanged || newimg.width !== oldimg.width)
+          $scope.image.height = getImageHeight($scope.bbox, $scope.image.width);
+
+        // Update width if height changed
+        if (newimg.height !== oldimg.height)
+          $scope.image.width = getImageWidth($scope.bbox, $scope.image.height);
+
+        $scope.autoResizing = true;  // stop the next update
+      } else {
+        $scope.autoResizing = false; // this update doesn't do anything, but the next update will
+      }
     }
-    $scope.$watch('bbox', updateImageWidth);
+    $scope.$watch('image', updateImageDimensions, true);
+    $scope.$watch('bbox', updateImageDimensions);
   }]);
 
 function initMap() {

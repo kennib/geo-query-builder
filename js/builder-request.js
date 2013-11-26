@@ -22,8 +22,8 @@ builderRequest.service("geoRequest", function() {
 
     if (data.service == "WMS" && data.request != "GetCapabilities") {
       data.layers = params.features ? params.features.join() : undefined;
-      data.width = params.width;
-      data.height = params.height;
+      data.width = params.image? params.image.width : 0;
+      data.height = params.image? params.image.height : 0;
       data.format = params.format;
     }
     if (data.service == "WFS" && data.request != "GetCapabilities") {
@@ -57,8 +57,10 @@ builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request
         requestType: "GetMap",
         outputFormat: "image/png",
         format: "image/png",
-        width: getImageWidth(params.bbox, height),
-        height: height,
+        image: {
+          width: getImageWidth(params.bbox, height),
+          height: height,
+        },
         features: (typeof(params.features) == typeof([]))? params.features : [params.features],
         bbox: params.bbox,
         cql_filter: params.cql_filter,

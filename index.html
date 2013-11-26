@@ -120,7 +120,7 @@
             <div class="row">
               <label for="width" class="col-md-2 control-label">Width:</label>
               <div class="col-md-8">
-                <input name="width" type="number" class="form-control" ng-model="width" step="10" min="0">
+                <input name="width" type="number" class="form-control" ng-model="image.width" step="10" min="0">
               </div>
               <label class="col-md-2 control-label">px</label>
             </div>
@@ -128,9 +128,16 @@
             <div class="row">
               <label for="height" class="col-md-2 control-label">Height:</label>
               <div class="col-md-8">
-                <input name="height" type="number" class="form-control" input-lg ng-model="height" step="10" min="0">
+                <input name="height" type="number" class="form-control" input-lg ng-model="image.height" step="10" min="0">
               </div>
               <label class="col-md-2 control-label">px</label>
+            </div>
+
+            <div class="row">
+              <label for="proportional" class="col-md-10 control-label">Keep dimensions proportional</label>
+              <div class="col-md-2">
+                <input name="proportional" id="proportional" type="checkbox" ng-model="image.proportional"></input>
+              </div>
             </div>
           </fieldset>
         </fieldset>
@@ -176,7 +183,7 @@
         <div class="row">
           <figure id="preview-image" class="col-md-4">
             <h3>Image preview</h3>
-            <img class="img-thumbnail" ng-src="{{ image(200) }}">
+            <img class="img-thumbnail" ng-src="{{ imageURL(200) }}">
           </figure>
 
           <div class="col-md-6">
