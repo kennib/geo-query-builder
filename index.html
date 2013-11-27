@@ -181,9 +181,15 @@
             <label for="featureLimit">Maximum number of features:</label>
             <input name="featureLimit" class="form-control" type="number" ng-model="featureLimit"></input>
           </fieldset>       
+
+          <fieldset class="col-md-3">
+            <label for="version" class="form-label">WFS version number:</label>
+            <select name="version" class="form-control" ng-model="version" ng-options="version as version for version in versions"></select>
+            <input class="form-control" ng-model="version" ng-show="manualEntry"></input>
+          </fieldset>
         </fieldset>
         
-        <!-- -->
+        <!-- ECQL input-->
         <fieldset class="row">
           <h2>
             <span class="glyphicon glyphicon-filter"></span>

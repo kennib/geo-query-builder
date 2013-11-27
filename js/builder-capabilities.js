@@ -58,18 +58,25 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
     if (serviceType == "WFS") {
       // Get request types
       var requestTypes = {};
+      var versions = [];
       $(xml)
         .find('ows\\:operationsmetadata')
         .children('ows\\:operation')
         .each(function() {
           var op = $(this);
           var name = op.attr("name");
+
           var formats = [];
           op.find('ows\\:parameter[name="outputFormat"]')
             .children().children().each(function() {
               formats.push($(this).text());
             });
           requestTypes[name] = {formats: formats};
+
+          op.find('ows\\:parameter[name="AcceptVersions"]')
+            .children().children().each(function() {
+              versions.push($(this).text());
+            });
         });
 
       // Get feature names and bounding boxes
@@ -79,7 +86,7 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
         .children('featuretype')
         .each(function() {
           var feature = $(this);
-          var name = feature .children('name').text();
+          var name = feature.children('name').text();
           var box = feature.children('ows\\:wgs84boundingbox');
           var min = box.children('ows\\:lowercorner').text().split(' ');
           var max = box.children('ows\\:uppercorner').text().split(' ');
@@ -89,6 +96,8 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
 
       cap.requestTypes = requestTypes;
       cap.featureList = featureTypes;
+      cap.versions = versions;
+      cap.version = versions[versions.length-1]; // Pick the latest version
     }
 
     // Set new defaults
