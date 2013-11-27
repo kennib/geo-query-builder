@@ -48,6 +48,10 @@ form, .container > div {
   margin: auto;
 }
 
+a#result-url {
+  word-wrap:break-word;
+}
+
 .glyphicon {
   margin-left: 5px;
 }
