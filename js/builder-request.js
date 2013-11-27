@@ -41,14 +41,14 @@ builderRequest.service("geoRequest", function() {
         var feature = params.features[f];
         var properties = params.featureInfo[feature];
         for (var p in properties) {
-          var prop = properties[p]
+          var prop = properties[p];
           numProperties++;
           if (prop.include)
-            props.push(prop.name)
+            props.push(prop.name);
         }
       }
 
-      if (numProperties != props.length)
+      if (numProperties != props.length && numProperties != 0)
         data.propertyName = props.join(',');
     }
 

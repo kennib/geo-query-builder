@@ -210,6 +210,14 @@ builder.controller("builder", ["$scope", "$http",
     }
     $scope.$watch('image', updateImageDimensions, true);
     $scope.$watch('bbox', updateImageDimensions);
+
+    // Update whether to include a feature's properties
+    $scope.includeProperties = function(feature, include) {
+      for (var p in feature) {
+        var prop = feature[p];
+        prop.include = include;
+      }
+    };
   }]);
 
 function initMap() {

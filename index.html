@@ -216,7 +216,10 @@
 
             <table class="table" ng-repeat="(featureName, feature) in featureInfo | isIn:features">
             <thead>
-              <tr><th></th><th colspan="2">{{ featureName }}</th></tr>
+              <tr>
+                <th><input type="checkbox" ng-model="include" ng-init="include = true" ng-change="includeProperties(feature, include)"></input></th>
+                <th colspan="2">{{ featureName }}</th>
+              </tr>
             </thead>
             <tbody>
               <tr ng-repeat="property in feature">
