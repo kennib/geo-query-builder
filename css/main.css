@@ -35,6 +35,10 @@ form, .container > div {
   height: 120px;
 }
 
+#preview > .row > * {
+  text-align: center;
+}
+
 #preview > .row {
   padding-left: 15px;
 }
