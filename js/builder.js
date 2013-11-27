@@ -118,7 +118,7 @@ builder.controller("builder", ["$scope", "$http",
     // Create a URL for the request
     $scope.url = function(override) {
       var req = request($scope);
-      return req.url + "?" + $.param(req.params);
+      return req.url + "?" + decodeURIComponent($.param(req.params));
     }
 
     // Create an image link for the request
