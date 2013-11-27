@@ -154,15 +154,17 @@ builder.controller("builder", ["$scope", "$http",
     $scope.$watch('host', updateCapabilities);
     $scope.$watch('serviceType', updateCapabilities);
 
-    // Update the list of features for this service
-    $scope.$watch('serviceType', function() {
+    // Update the list of properties for the features of this service
+    function updateFeatureProperties() {
       getFeatureInfo($scope).success(function(xml) {
         $scope.featureInfo = processFeatureInfo(xml);
         $scope.capabilitiesError = null;
       }).error(function(error) {
         $scope.capabilitiesError = error? error: "Unable to retreive the feature's properties";
       });
-    });
+    }
+    $scope.$watch('host', updateFeatureProperties);
+    $scope.$watch('serviceType', updateFeatureProperties);
 
     // Update the bounding box based on the layer/feature selection
     function updateBBox(feature) {
