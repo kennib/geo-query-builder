@@ -8,6 +8,7 @@
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
 
+    <script src="js/builder-directives.js"></script>
     <script src="js/builder-defaults.js"></script>
     <script src="js/builder-utils.js"></script>
     <script src="js/builder-request.js"></script>
@@ -31,7 +32,7 @@
       <form role="form">
 
         <!-- General inputs -->
-        <fieldset class="row">
+        <fieldset builder-section>
           <h2>
             <span class="glyphicon glyphicon-cog"></span>
             Service settings
@@ -69,10 +70,10 @@
             <label for="manualEntry">Manual inputs?</label>
             <input name="manualEntry" id="manualEntry" type="checkbox" ng-model="manualEntry"></input>
           </fieldset>
-        </fieldset>
+        </fieldset builder-section>
 
         <!-- Bounds inputs -->
-        <fieldset class="row">
+        <fieldset builder-section>
           <h2>
             <span class="glyphicon glyphicon-globe"></span>
             Geographic Bounds
@@ -118,12 +119,12 @@
           </fieldset>
 
           <fieldset class="col-md-6">
-            <div id="map"></div>
+            <div id="map" ng-init="initMap()"></div>
           </fieldset>
-        </fieldset>
+        </fieldset builder-section>
         
         <!-- WMS inputs -->
-        <fieldset class="row" ng-show="serviceType == 'WMS'">
+        <fieldset builder-section ng-show="serviceType == 'WMS'">
           <h2>
             <span class="glyphicon glyphicon-picture"></span>
             WMS Settings
@@ -162,10 +163,10 @@
               </div>
             </div>
           </fieldset>
-        </fieldset>
+        </fieldset builder-section>
 
         <!-- WFS inputs -->
-        <fieldset class="row" ng-show="serviceType == 'WFS'">
+        <fieldset builder-section ng-show="serviceType == 'WFS'">
           <h2>
             <span class="glyphicon glyphicon-list-alt"></span>
             WFS Settings
@@ -187,10 +188,10 @@
             <select name="version" class="form-control" ng-model="version" ng-options="version as version for version in versions"></select>
             <input class="form-control" ng-model="version" ng-show="manualEntry"></input>
           </fieldset>
-        </fieldset>
+        </fieldset builder-section>
         
         <!-- ECQL input-->
-        <fieldset class="row">
+        <fieldset builder-section>
           <h2>
             <span class="glyphicon glyphicon-filter"></span>
             Data Filter
@@ -200,13 +201,13 @@
             <label for="cql_filter">ECQL filter query:</label>
             <textarea name="cql_filter" id="ecql-filter" class="form-control" ng-model="cql_filter"></textarea>
           </fieldset>
-        </fieldset>
+          <a href="http://docs.geoserver.org/latest/en/user/filter/ecql_reference.html#filter-ecql-reference">ECQL Reference</a>
+        </fieldset builder-section>
 
-        <a href="http://docs.geoserver.org/latest/en/user/filter/ecql_reference.html#filter-ecql-reference">ECQL Reference</a>
       </form>
         
       <!-- WMS/WFS outputs -->
-      <div id="preview" class="row">
+      <div builder-section id="preview">
         <h2>
           <span class="glyphicon glyphicon-eye-open"></span>
           Data Preview
@@ -237,10 +238,10 @@
             </table>
           </div>
         </div>
-      </div>
+      </div builder-section>
 
       <!-- Request outputs -->
-      <div id="request" class="row">
+      <div builder-section id="request">
         <h2>
           <span class="glyphicon glyphicon-log-in"></span>
           Request
@@ -249,7 +250,7 @@
         <p>Request URL: <a id="result-url" ng-href="{{ url() }}">{{ url() }}</a></p>
         <p>Request JSON: <pre>{{ request() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>
-      </div>
+      </div builder-section>
     </div>
   </body>
 </html>
