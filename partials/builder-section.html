@@ -1,10 +1,10 @@
-<div class="row">
-  <h2>
+<div class="panel">
+  <div class="panel-heading">
     <span class="glyphicon glyphicon-{{ icon }}"></span>
-    {{ title }}
+    <h2 class="panel-title">{{ title }}</h2>
     <span class="collapser glyphicon pull-right" ng-class="{'glyphicon-chevron-down': !collapsed, 'glyphicon-chevron-left': collapsed}" ng-click="collapsed = !collapsed"></span>
-  </h2>
+  </div>
 
-  <div ng-transclude ng-hide="collapsed">
+  <div ng-transclude class="panel-body" ng-hide="collapsed">
   </div>
 </div>

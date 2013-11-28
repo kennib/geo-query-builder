@@ -4,6 +4,7 @@ directives.directive("builderSection", function() {
   return {
     templateUrl: 'partials/builder-section.html',
     restrict: 'A',
+    replace: true,
     transclude: true,
     scope: {
       'title': '@',

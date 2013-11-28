@@ -1,3 +1,10 @@
+/* Remove container padding */
+.container {
+  padding: 0px;
+  padding-bottom: 20px;
+}
+
+/* Align header */
 header {
   width: 100%;
   padding: 10px !important;
@@ -5,48 +12,33 @@ header {
   margin: 0px !important;
 }
 
-.container {
-  padding: 0px;
-  padding-bottom: 20px;
-}
-
+/* Give the header a different font */
 header h1 {
   font-family: 'Signika', sans-serif;
   font-size: 50px;
 }
 
-form {
-  padding: 15px;
-}
-
+/* Align the form */
 form, .container > div {
   margin: 0px;
 }
 
+/* Set the height of the bounding box map */
 #map {
   height: 300px;
 }
 
+/* Give the layer selection list more height */
 #wms-layers {
   height: 200px;
 }
 
+/* Give CQL filter textbox some more height */
 #ecql-filter {
   height: 120px;
 }
 
-#preview > .row > .row > * {
-  text-align: center;
-}
-
-#preview .row,
-#request .row {
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
+/* Give the preview image some size*/
 #preview-image {
   min-width: 400px;
   min-height: 200px;
@@ -56,17 +48,28 @@ form, .container > div {
   margin: auto;
 }
 
+/* Ensure the request url wraps */
 a#result-url {
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
-.glyphicon {
-  margin-left: 5px;
+/******************************************************
+*
+* Builder Sections
+*
+* Include a heading with an icon and title and some collapsible content
+*
+******************************************************/
+
+.panel-heading {
+  font-size: 25px;
 }
 
-.collapser {
-  right: 30px;
+.panel-title {
+  display: inline-block;
+  font-size: 30px;
 }
+
 
 /******************************************************
 * Colours
@@ -89,11 +92,16 @@ body {
   border: solid 1px #EEE;
   border-top: none;
   border-bottom: none;
+  background-color: white;
 }
 
 header {
   color: hsl(91, 65%, 85%);
   background-color: hsl(91, 42%, 63%);
+}
+
+.panel-primary {
+  background: #F2ECCF;
 }
 
 form {
@@ -102,8 +110,4 @@ form {
 
 .container > div {
   background-color: white;
-}
-
-#preview {
-  border: solid 5px hsl(91, 65%, 85%);
 }
