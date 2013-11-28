@@ -32,12 +32,7 @@
       <form role="form">
 
         <!-- General inputs -->
-        <fieldset builder-section>
-          <h2>
-            <span class="glyphicon glyphicon-cog"></span>
-            Service settings
-          </h2>
-
+        <fieldset builder-section title="Service Settings" icon="cog">
           <div class="alert alert-danger" ng-show="capabilitiesError">
             {{ capabilitiesError }}
           </div>
@@ -73,12 +68,7 @@
         </fieldset builder-section>
 
         <!-- Bounds inputs -->
-        <fieldset builder-section>
-          <h2>
-            <span class="glyphicon glyphicon-globe"></span>
-            Geographic Bounds
-          </h2>
-
+        <fieldset builder-section title="Geographic Bounds" icon="globe">
           <fieldset class="col-md-6">
             <label>Input the geographic bounds for this request:</label>
 
@@ -124,12 +114,7 @@
         </fieldset builder-section>
         
         <!-- WMS inputs -->
-        <fieldset builder-section ng-show="serviceType == 'WMS'">
-          <h2>
-            <span class="glyphicon glyphicon-picture"></span>
-            WMS Settings
-          </h2>
-
+        <fieldset builder-section title="WMS Settings" icon="picture" ng-show="serviceType == 'WMS'">
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': features}">
             <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" id="wms-layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
@@ -166,12 +151,7 @@
         </fieldset builder-section>
 
         <!-- WFS inputs -->
-        <fieldset builder-section ng-show="serviceType == 'WFS'">
-          <h2>
-            <span class="glyphicon glyphicon-list-alt"></span>
-            WFS Settings
-          </h2>
-
+        <fieldset builder-section title="WFS Settings" icon="list-alt" ng-show="serviceType == 'WFS'">
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
@@ -191,27 +171,17 @@
         </fieldset builder-section>
         
         <!-- ECQL input-->
-        <fieldset builder-section>
-          <h2>
-            <span class="glyphicon glyphicon-filter"></span>
-            Data Filter
-          </h2>
-          
+        <fieldset builder-section title="Data Filter" icon="filter">
           <fieldset class="col-md-8"> 
             <label for="cql_filter">ECQL filter query:</label>
             <textarea name="cql_filter" id="ecql-filter" class="form-control" ng-model="cql_filter"></textarea>
           </fieldset>
           <a href="http://docs.geoserver.org/latest/en/user/filter/ecql_reference.html#filter-ecql-reference">ECQL Reference</a>
         </fieldset builder-section>
-
       </form>
         
       <!-- WMS/WFS outputs -->
-      <div builder-section id="preview">
-        <h2>
-          <span class="glyphicon glyphicon-eye-open"></span>
-          Data Preview
-        </h2>
+      <div builder-section title="Data Preview" icon="eye-open" id="preview">
         <div class="row">
           <figure id="preview-image" class="col-md-4">
             <h3>Image preview</h3>
@@ -241,12 +211,7 @@
       </div builder-section>
 
       <!-- Request outputs -->
-      <div builder-section id="request">
-        <h2>
-          <span class="glyphicon glyphicon-log-in"></span>
-          Request
-        </h2>
-
+      <div builder-section title="Request" icon="log-in" id="request">
         <p>Request URL: <a id="result-url" ng-href="{{ url() }}">{{ url() }}</a></p>
         <p>Request JSON: <pre>{{ request() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>

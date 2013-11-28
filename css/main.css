@@ -35,12 +35,16 @@ form, .container > div {
   height: 120px;
 }
 
-#preview > .row > * {
+#preview > .row > .row > * {
   text-align: center;
 }
 
-#preview > .row {
+#preview .row,
+#request .row {
+  margin-left: 0px;
+  margin-right: 0px;
   padding-left: 15px;
+  padding-right: 15px;
 }
 
 #preview-image {
@@ -58,6 +62,10 @@ a#result-url {
 
 .glyphicon {
   margin-left: 5px;
+}
+
+.collapser {
+  right: 30px;
 }
 
 /******************************************************

@@ -5,11 +5,13 @@ directives.directive("builderSection", function() {
     templateUrl: 'partials/builder-section.html',
     restrict: 'A',
     transclude: true,
-    scope: {},
+    scope: {
+      'title': '@',
+      'icon': '@',
+    },
     controller: function($scope) {
     },
     link: function(scope, element, attrs, ctrl) {
     },
-
   };
 });

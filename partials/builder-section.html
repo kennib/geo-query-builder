@@ -1,2 +1,10 @@
-<fieldset class="row" ng-transclude>
-</fieldset>
+<div class="row">
+  <h2>
+    <span class="glyphicon glyphicon-{{ icon }}"></span>
+    {{ title }}
+    <span class="collapser glyphicon pull-right" ng-class="{'glyphicon-chevron-down': !collapsed, 'glyphicon-chevron-left': collapsed}" ng-click="collapsed = !collapsed"></span>
+  </h2>
+
+  <div ng-transclude ng-hide="collapsed">
+  </div>
+</div>
