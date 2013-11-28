@@ -1,10 +1,3 @@
-/* Remove container padding */
-.container {
-  padding: 0px;
-  padding-bottom: 20px;
-}
-
-/* Align header */
 header {
   width: 100%;
   padding: 10px !important;
@@ -12,33 +5,44 @@ header {
   margin: 0px !important;
 }
 
-/* Give the header a different font */
+.container {
+  padding: 0px;
+  padding-bottom: 20px;
+}
+
 header h1 {
   font-family: 'Signika', sans-serif;
   font-size: 50px;
 }
 
-/* Align the form */
+form {
+  padding: 15px;
+}
+
 form, .container > div {
   margin: 0px;
 }
 
-/* Set the height of the bounding box map */
 #map {
   height: 300px;
 }
 
-/* Give the layer selection list more height */
 #wms-layers {
   height: 200px;
 }
 
-/* Give CQL filter textbox some more height */
 #ecql-filter {
   height: 120px;
 }
 
-/* Give the preview image some size*/
+#preview > .row > * {
+  text-align: center;
+}
+
+#preview > .row {
+  padding-left: 15px;
+}
+
 #preview-image {
   min-width: 400px;
   min-height: 200px;
@@ -48,28 +52,13 @@ form, .container > div {
   margin: auto;
 }
 
-/* Ensure the request url wraps */
 a#result-url {
-  word-wrap: break-word;
+  word-wrap:break-word;
 }
 
-/******************************************************
-*
-* Builder Sections
-*
-* Include a heading with an icon and title and some collapsible content
-*
-******************************************************/
-
-.panel-heading {
-  font-size: 25px;
+.glyphicon {
+  margin-left: 5px;
 }
-
-.panel-title {
-  display: inline-block;
-  font-size: 30px;
-}
-
 
 /******************************************************
 * Colours
@@ -92,16 +81,11 @@ body {
   border: solid 1px #EEE;
   border-top: none;
   border-bottom: none;
-  background-color: white;
 }
 
 header {
   color: hsl(91, 65%, 85%);
   background-color: hsl(91, 42%, 63%);
-}
-
-.panel-primary {
-  background: #F2ECCF;
 }
 
 form {
@@ -110,4 +94,8 @@ form {
 
 .container > div {
   background-color: white;
+}
+
+#preview {
+  border: solid 5px hsl(91, 65%, 85%);
 }
