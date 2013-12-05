@@ -43,26 +43,26 @@
 
           <fieldset class="col-md-3">
             <label for="host">WMS server:</label>
-            <select name="host" class="form-control" ng-model="host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
-            <input class="form-control" ng-model="host" ng-show="manualEntry"></input>
+            <select name="host" class="form-control" ng-model="request.host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
+            <input class="form-control" ng-model="request.host" ng-show="manualEntry"></input>
           </fieldset>
 
           <fieldset class="col-md-2">
-            <label for="serviceType">Service type:</label>
-            <select name="serviceType" class="form-control" ng-model="serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
-            <input class="form-control" ng-model="serviceType" ng-show="manualEntry"></input>
+            <label for="service">Service type:</label>
+            <select name="service" class="form-control" ng-model="request.service" ng-options="service for service in services"></select>
+            <input class="form-control" ng-model="request.service" ng-show="manualEntry"></input>
           </fieldset>
 
           <fieldset class="col-md-2">
-            <label for="requestType">Request type:</label> 
-            <select name="requestType" class="form-control" ng-model="requestType" ng-options="requestType as requestType for (requestType, request) in requestTypes"></select>
-            <input class="form-control" ng-model="requestType" ng-show="manualEntry"></input>
+            <label for="request">Request type:</label> 
+            <select name="request" class="form-control" ng-model="request.request" ng-options="requestName as requestName for (requestName, request) in requests"></select>
+            <input class="form-control" ng-model="request.request" ng-show="manualEntry"></input>
           </fieldset>
 
           <fieldset class="col-md-3">
             <label for="format">Output format:</label>  
-            <select name="format" class="form-control" ng-model="format" ng-options="format for format in requestTypes[requestType].formats"></select>
-            <input class="form-control" ng-model="format" ng-show="manualEntry"></input>
+            <select name="format" class="form-control" ng-model="request.format" ng-options="format for format in requests[request.request].formats"></select>
+            <input class="form-control" ng-model="request.format" ng-show="manualEntry"></input>
           </fieldset>
           
           <fieldset class="col-md-2">
@@ -84,28 +84,28 @@
             <div class="row">
               <label for="miny" class="col-md-2 control-label">South</label>
               <div class="col-md-8">
-                <input name="miny" class="form-control" ng-model="bbox.miny">
+                <input name="miny" class="form-control" ng-model="request.bounds.miny">
               </div>
             </div>
 
             <div class="row">
               <label for="minx" class="col-md-2 control-label">West</label>
               <div class="col-md-8">
-                <input name="minx" class="form-control" ng-model="bbox.minx">
+                <input name="minx" class="form-control" ng-model="request.bounds.minx">
               </div>
             </div>
 
             <div class="row">
               <label for="maxy" class="col-md-2 control-label">North</label>
               <div class="col-md-8">
-                <input name="maxy" class="form-control" ng-model="bbox.maxy">
+                <input name="maxy" class="form-control" ng-model="request.bounds.maxy">
               </div>
             </div>
 
             <div class="row">
               <label for="maxx" class="col-md-2 control-label">East</label>
               <div class="col-md-8">
-                <input name="maxx" class="form-control" ng-model="bbox.maxx">
+                <input name="maxx" class="form-control" ng-model="request.bounds.maxx">
               </div>
             </div>
 
@@ -123,17 +123,17 @@
         </fieldset>
         
         <!-- WMS inputs -->
-        <fieldset class="row" ng-show="serviceType == 'WMS'">
+        <fieldset class="row" ng-show="request.service == 'WMS'">
           <h2>
             <span class="glyphicon glyphicon-picture"></span>
             WMS Settings
           </h2>
 
-          <fieldset class="col-md-4 has-error" ng-class="{'has-success': features}">
+          <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.features}">
             <label for="layers" class="control-label">Select the layers to request:</label>
-            <select name="layers" id="wms-layers" class="form-control" ng-model="features" ng-options="name as name for (name, feature) in featureList"
+            <select name="layers" id="wms-layers" class="form-control" ng-model="request.features" ng-options="name as name for (name, feature) in featureList"
               multiple="multiple" multiselect-dropdown required></select>
-            <input class="form-control" ng-model="feature" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.feature" ng-show="manualEntry"></input>
            </fieldset>
 
           <fieldset class="col-md-4">
@@ -142,7 +142,7 @@
             <div class="row">
               <label for="width" class="col-md-2 control-label">Width:</label>
               <div class="col-md-8">
-                <input name="width" type="number" class="form-control" ng-model="image.width" step="10" min="0">
+                <input name="width" type="number" class="form-control" ng-model="request.image.width" step="10" min="0">
               </div>
               <label class="col-md-2 control-label">px</label>
             </div>
@@ -150,7 +150,7 @@
             <div class="row">
               <label for="height" class="col-md-2 control-label">Height:</label>
               <div class="col-md-8">
-                <input name="height" type="number" class="form-control" input-lg ng-model="image.height" step="10" min="0">
+                <input name="height" type="number" class="form-control" input-lg ng-model="request.image.height" step="10" min="0">
               </div>
               <label class="col-md-2 control-label">px</label>
             </div>
@@ -158,34 +158,34 @@
             <div class="row">
               <label for="proportional" class="col-md-10 control-label">Keep dimensions proportional</label>
               <div class="col-md-2">
-                <input name="proportional" id="proportional" type="checkbox" ng-model="image.proportional"></input>
+                <input name="proportional" id="proportional" type="checkbox" ng-model="request.image.proportional"></input>
               </div>
             </div>
           </fieldset>
         </fieldset>
 
         <!-- WFS inputs -->
-        <fieldset class="row" ng-show="serviceType == 'WFS'">
+        <fieldset class="row" ng-show="request.service == 'WFS'">
           <h2>
             <span class="glyphicon glyphicon-list-alt"></span>
             WFS Settings
           </h2>
 
-          <fieldset class="col-md-4 has-error" ng-class="{'has-success': feature}">
+          <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
-            <select name="feature" class="form-control" ng-model="feature" ng-options="name as name for (name, feature) in featureList"></select>
-            <input class="form-control" ng-model="feature" ng-show="manualEntry"></input>
+            <select name="feature" class="form-control" ng-model="request.feature" ng-options="name as name for (name, feature) in featureList"></select>
+            <input class="form-control" ng-model="request.feature" ng-show="manualEntry"></input>
           </fieldset>
          
           <fieldset class="col-md-3"> 
             <label for="featureLimit">Maximum number of features:</label>
-            <input name="featureLimit" class="form-control" type="number" ng-model="featureLimit"></input>
+            <input name="featureLimit" class="form-control" type="number" ng-model="request.maxfeatures"></input>
           </fieldset>       
 
           <fieldset class="col-md-3">
             <label for="version" class="form-label">WFS version number:</label>
-            <select name="version" class="form-control" ng-model="version" ng-options="version as version for version in versions"></select>
-            <input class="form-control" ng-model="version" ng-show="manualEntry"></input>
+            <select name="version" class="form-control" ng-model="request.version" ng-options="version as version for version in versions"></select>
+            <input class="form-control" ng-model="request.version" ng-show="manualEntry"></input>
           </fieldset>
         </fieldset>
         
@@ -220,7 +220,7 @@
           <div class="col-md-6">
             <h3>Feature properties</h3>
 
-            <table class="table" ng-repeat="(featureName, feature) in featureInfo | isIn:features">
+            <table class="table" ng-repeat="(featureName, feature) in featureInfo | isIn:request.features">
             <thead>
               <tr>
                 <th><input type="checkbox" ng-model="include" ng-init="include = true" ng-change="includeProperties(feature, include)"></input></th>
@@ -247,7 +247,7 @@
         </h2>
 
         <p>Request URL: <a id="result-url" ng-href="{{ url() }}">{{ url() }}</a></p>
-        <p>Request JSON: <pre>{{ request() | json }}</pre></p>
+        <p>Request JSON: <pre>{{ requestURL() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>
       </div>
     </div>

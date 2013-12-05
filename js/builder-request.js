@@ -5,19 +5,19 @@ var builderRequest = angular.module('builder-request', ['builder-utils']);
 builderRequest.service("geoRequest", function() {
   return function (params) {
     var data = {
-      service: params.serviceType,
-      request: params.requestType,
+      service: params.service,
+      request: params.request,
     };
 
     if (params.cql_filter) {
-      data.cql_filter = params.cql_filter;
+      data.cql_filter = params.ECQLfilter;
     }
     
-    if (!$.isEmptyObject(params.bbox) && data.request != "GetCapabilities") {
+    if (!$.isEmptyObject(params.bounds) && data.request != "GetCapabilities") {
       if (data.service == "WMS")
-        data.bbox = [params.bbox.minx, params.bbox.miny, params.bbox.maxx, params.bbox.maxy].join();
+        data.bbox = [params.bounds.minx, params.bounds.miny, params.bounds.maxx, params.bounds.maxy].join();
       if (data.service == "WFS" && !params.cql_filter)
-        data.bbox = [params.bbox.miny, params.bbox.minx, params.bbox.maxy, params.bbox.maxx].join();
+        data.bbox = [params.bounds.miny, params.bounds.minx, params.bounds.maxy, params.bounds.maxx].join();
     }
 
     if (data.service == "WMS" && data.request != "GetCapabilities") {
@@ -94,17 +94,17 @@ builderRequest.service('geoImage', ['geoRequest', 'imageWidth', function(request
 
       var imageParams = {
         host: params.host,
-        serviceType: "WMS",
-        requestType: "GetMap",
+        service: "WMS",
+        request: "GetMap",
         outputFormat: "image/png",
         format: "image/png",
         image: {
-          width: getImageWidth(params.bbox, height),
+          width: getImageWidth(params.bounds, height),
           height: height,
         },
         features: (typeof(params.features) == typeof([]))? params.features : [params.features],
-        bbox: params.bbox,
-        cql_filter: params.cql_filter,
+        bounds: params.bounds,
+        ECQLfilter: params.ECQLfilter,
       };
 
       var req = request(imageParams);
@@ -122,8 +122,8 @@ builderRequest.service('geoFeatureInfo', ['$http', 'geoRequest', function($http,
   return function(params) {
     var featureInfoParams = {
       host: params.host,
-      serviceType: "WFS",
-      requestType: "DescribeFeatureType",
+      service: "WFS",
+      request: "DescribeFeatureType",
       feature: params.feature,
     };
     var req = request(featureInfoParams);

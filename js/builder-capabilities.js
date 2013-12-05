@@ -5,8 +5,8 @@ builderCap.service("requestCapabilities", ['$http', 'geoRequest',  function($htt
   return function(params) {
     var cap = {
       host: params.host,
-      serviceType: params.serviceType,
-      requestType: "GetCapabilities",
+      service: params.service,
+      request: "GetCapabilities",
       timeout: params.timeout,
     };
 
@@ -19,24 +19,24 @@ builderCap.service("requestCapabilities", ['$http', 'geoRequest',  function($htt
 /* Takes the xml string containing the capabilities
    and return JSON object with the key data/properties */
 builderCap.service('processCapabilities', ['defaults', function(defaults) {
-  return function(serviceType, xml) {
+  return function(service, xml) {
     // An object which will contain the capabilities
     // from the xml capabilities string
     var cap = {};
 
     // Process the WMS capabilities
-    if (serviceType == "WMS") {
+    if (service == "WMS") {
       var cap = $.xml2json(xml).Capability;
 
       // Get request types
-      var requestTypes = cap.Request;
-      for (var rt in requestTypes) {
-        var formats = requestTypes[rt].Format;
+      var requests = cap.Request;
+      for (var rt in requests) {
+        var formats = requests[rt].Format;
 
         if (typeof(formats) != typeof([]))
-          requestTypes[rt].formats = [formats];
+          requests[rt].formats = [formats];
         else
-          requestTypes[rt].formats = formats;
+          requests[rt].formats = formats;
       }
 
       // Get layer names and bounding boxes
@@ -50,14 +50,14 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
         layers[layer.name] = layer;
       }
 
-      cap.requestTypes = requestTypes;
+      cap.requests = requests;
       cap.featureList = layers;
     }
 
     // Process the WFS capabilities
-    if (serviceType == "WFS") {
+    if (service == "WFS") {
       // Get request types
-      var requestTypes = {};
+      var requests = {};
       var versions = [];
       $(xml)
         .find('ows\\:operationsmetadata')
@@ -71,7 +71,7 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
             .children().children().each(function() {
               formats.push($(this).text());
             });
-          requestTypes[name] = {formats: formats};
+          requests[name] = {formats: formats};
 
           op.find('ows\\:parameter[name="AcceptVersions"]')
             .children().children().each(function() {
@@ -94,16 +94,14 @@ builderCap.service('processCapabilities', ['defaults', function(defaults) {
           featureTypes[name] = {name: name, bbox: bbox};
         });
 
-      cap.requestTypes = requestTypes;
+      cap.requests = requests;
       cap.featureList = featureTypes;
       cap.versions = versions;
       cap.version = versions[versions.length-1]; // Pick the latest version
     }
 
     // Set new defaults
-    var def = defaults[serviceType];
-    cap.requestType = def.requestType;
-    cap.format = def.format;
+    cap.defaults = defaults[service];
 
     return cap;
   }
