@@ -180,7 +180,7 @@ builder.controller("builder", ["$scope", "$http",
 
     // Update the bounding box based on the layer/feature selection
     function updateBBox(feature) {
-      if (feature && $scope.updateBbox) {
+      if (feature && $scope.settings.autobounds) {
         var bbox = $scope.featureList[feature].bbox;
         $scope.request.bounds = bbox;
       }
@@ -205,12 +205,11 @@ builder.controller("builder", ["$scope", "$http",
     function updateImageDimensions(newimg, oldimg) {
       newimg = angular.copy(newimg); // avoid changing the newimg data
 
-      if (oldimg && $scope.request.image.proportional && !$scope.autoResizing) {
+      if (oldimg && $scope.settings.proportional && !$scope.autoResizing) {
         var bboxChanged = newimg.width === undefined;
-        var propChanged = newimg.proportional !== oldimg.proportional;
 
         // Update height if width changed or bbox is changed or propotionality changed
-        if (bboxChanged || propChanged || newimg.width !== oldimg.width)
+        if (bboxChanged || newimg.width !== oldimg.width)
           $scope.request.image.height = getImageHeight($scope.request.bounds, $scope.request.image.width);
 
         // Update width if height changed
@@ -223,7 +222,10 @@ builder.controller("builder", ["$scope", "$http",
       }
     }
     $scope.$watch('request.image', updateImageDimensions, true);
-    $scope.$watch('request.bbox', updateImageDimensions);
+    $scope.$watch('request.bounds', updateImageDimensions);
+    $scope.$watch('settings.proportional', function() {
+      updateImageDimensions(true, true);
+    });
 
     // Update whether to include a feature's properties
     $scope.includeProperties = function(feature, include) {

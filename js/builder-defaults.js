@@ -25,7 +25,7 @@ builderDefaults.value("defaults", {
   maxfeatures: 50,
   settings: {
     manualinput: false,
-    autobound: true,
+    autobounds: true,
     proportional: true,
     timeout: 3000,
   }

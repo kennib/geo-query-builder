@@ -44,30 +44,30 @@
           <fieldset class="col-md-3">
             <label for="host">WMS server:</label>
             <select name="host" class="form-control" ng-model="request.host" ng-options="hostUrl as hostName for (hostName, hostUrl) in hosts"></select>
-            <input class="form-control" ng-model="request.host" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.host" ng-show="settings.manualinput"></input>
           </fieldset>
 
           <fieldset class="col-md-2">
             <label for="service">Service type:</label>
             <select name="service" class="form-control" ng-model="request.service" ng-options="service for service in services"></select>
-            <input class="form-control" ng-model="request.service" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.service" ng-show="settings.manualinput"></input>
           </fieldset>
 
           <fieldset class="col-md-2">
             <label for="request">Request type:</label> 
             <select name="request" class="form-control" ng-model="request.request" ng-options="requestName as requestName for (requestName, request) in requests"></select>
-            <input class="form-control" ng-model="request.request" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.request" ng-show="settings.manualinput"></input>
           </fieldset>
 
           <fieldset class="col-md-3">
             <label for="format">Output format:</label>  
             <select name="format" class="form-control" ng-model="request.format" ng-options="format for format in requests[request.request].formats"></select>
-            <input class="form-control" ng-model="request.format" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.format" ng-show="settings.manualinput"></input>
           </fieldset>
           
           <fieldset class="col-md-2">
             <label for="manualEntry">Manual inputs?</label>
-            <input name="manualEntry" id="manualEntry" type="checkbox" ng-model="manualEntry"></input>
+            <input name="manualEntry" id="manualEntry" type="checkbox" ng-model="settings.manualinput"></input>
           </fieldset>
         </fieldset>
 
@@ -112,7 +112,7 @@
             <div class="row">
               <label for="updateBbox" class="col-md-8 control-label">Change bounding box to match layer/feature type selection</label>
               <div class="col-md-2">
-                <input name="updateBbox" id="updateBbox" type="checkbox" ng-model="updateBbox" ng-init="updateBbox = true"></input>
+                <input name="updateBbox" id="updateBbox" type="checkbox" ng-model="settings.autobounds"></input>
               </div>
             </div>
           </fieldset>
@@ -133,7 +133,7 @@
             <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" id="wms-layers" class="form-control" ng-model="request.features" ng-options="name as name for (name, feature) in featureList"
               multiple="multiple" multiselect-dropdown required></select>
-            <input class="form-control" ng-model="request.feature" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.feature" ng-show="settings.manualinput"></input>
            </fieldset>
 
           <fieldset class="col-md-4">
@@ -158,7 +158,7 @@
             <div class="row">
               <label for="proportional" class="col-md-10 control-label">Keep dimensions proportional</label>
               <div class="col-md-2">
-                <input name="proportional" id="proportional" type="checkbox" ng-model="request.image.proportional"></input>
+                <input name="proportional" id="proportional" type="checkbox" ng-model="settings.proportional"></input>
               </div>
             </div>
           </fieldset>
@@ -174,7 +174,7 @@
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="request.feature" ng-options="name as name for (name, feature) in featureList"></select>
-            <input class="form-control" ng-model="request.feature" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.feature" ng-show="settings.manualinput"></input>
           </fieldset>
          
           <fieldset class="col-md-3"> 
@@ -185,7 +185,7 @@
           <fieldset class="col-md-3">
             <label for="version" class="form-label">WFS version number:</label>
             <select name="version" class="form-control" ng-model="request.version" ng-options="version as version for version in versions"></select>
-            <input class="form-control" ng-model="request.version" ng-show="manualEntry"></input>
+            <input class="form-control" ng-model="request.version" ng-show="settings.manualinput"></input>
           </fieldset>
         </fieldset>
         
