@@ -1,5 +1,6 @@
 var builder = angular.module("builder", [
-  "ngRoute", "builder-request", "builder-capabilities",
+  "ngRoute",
+  "builder-defaults", "builder-request", "builder-capabilities", "builder-directives",
 ]);
 
 /* Filter an array by the objects in another array */
@@ -84,42 +85,6 @@ builder.controller("builder", ["$scope", "$http",
     $scope.requestURL = function() {
       return geoRequest($scope.request);
     };
-
-    // Initialize the Google map
-    var map = initMap();
-    // Update bounds on map rectangle update
-    function updateMapBounds(bounds) {
-      var ne = map.rectangle.getBounds().getNorthEast();
-      var sw = map.rectangle.getBounds().getSouthWest();
-      
-      $scope.request.bounds = {
-        minx: sw.lng(),
-        maxx: ne.lng(),
-        miny: sw.lat(),
-        maxy: ne.lat(),
-      };
-
-      $scope.$apply('request.bounds');
-    }
-    var boundsListener = google.maps.event.addListener(map.rectangle, 'bounds_changed', updateMapBounds);
-    // Update rectangle on bounds update
-    $scope.$watch('request.bounds', function(bbox) {
-      var ne = map.rectangle.getBounds().getNorthEast();
-      var sw = map.rectangle.getBounds().getSouthWest();
-
-      if (bbox && bbox.minx && bbox.maxx && bbox.miny && bbox.maxy) {
-        var bounds = new google.maps.LatLngBounds(
-          new google.maps.LatLng(bbox.miny, bbox.minx),
-          new google.maps.LatLng(bbox.maxy, bbox.maxx)
-        );
-
-        // Add and remove listener to stop an infinite update loop
-        // between the map and the bounds inputs
-        google.maps.event.removeListener(boundsListener);
-        map.rectangle.setOptions({bounds: bounds}); // do the update
-        boundsListener = google.maps.event.addListener(map.rectangle, 'bounds_changed', updateMapBounds);
-      }
-    });
 
     // Create curl text
     $scope.CURL = function() {
@@ -234,24 +199,62 @@ builder.controller("builder", ["$scope", "$http",
         prop.include = include;
       }
     };
+
+    // Function to initialise the map and associated behaviours
+    $scope.initMap = function initMap() {
+      var mapOptions = {
+        center: new google.maps.LatLng(-31.952162,135.175781), // Australia
+        zoom: 1,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      var rectangle = new google.maps.Rectangle({
+        bounds: new google.maps.LatLngBounds(),
+        editable: true,
+        draggable: true,
+      });
+
+      // Update bounds on map rectangle update
+      function updateMapBounds(bounds) {
+        var ne = rectangle.getBounds().getNorthEast();
+        var sw = rectangle.getBounds().getSouthWest();
+        
+        $scope.request.bounds = {
+          minx: sw.lng(),
+          maxx: ne.lng(),
+          miny: sw.lat(),
+          maxy: ne.lat(),
+        };
+
+        $scope.$apply('request.bounds');
+      }
+      var boundsListener = google.maps.event.addListener(rectangle, 'bounds_changed', updateMapBounds);
+
+      // Update rectangle on bounds update
+      $scope.$watch('request.bounds', function(bbox) {
+        var ne = rectangle.getBounds().getNorthEast();
+        var sw = rectangle.getBounds().getSouthWest();
+
+        if (bbox && bbox.minx && bbox.maxx && bbox.miny && bbox.maxy) {
+          var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(bbox.miny, bbox.minx),
+            new google.maps.LatLng(bbox.maxy, bbox.maxx)
+          );
+
+          // Add and remove listener to stop an infinite update loop
+          // between the map and the bounds inputs
+          google.maps.event.removeListener(boundsListener);
+          rectangle.setOptions({bounds: bounds}); // do the update
+          boundsListener = google.maps.event.addListener(rectangle, 'bounds_changed', updateMapBounds);
+        }
+      });
+
+      rectangle.setMap(map);
+
+      return {map: map, rectangle: rectangle};
+    }
   }]);
 
-function initMap() {
-  var mapOptions = {
-    center: new google.maps.LatLng(-31.952162,135.175781), // Australia
-    zoom: 1,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
 
-  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-  var rectangle = new google.maps.Rectangle({
-    bounds: new google.maps.LatLngBounds(),
-    editable: true,
-    draggable: true,
-  });
-
-  rectangle.setMap(map);
-
-  return {map: map, rectangle: rectangle};
-}

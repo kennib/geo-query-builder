@@ -1,8 +1,8 @@
 <div class="panel">
   <div class="panel-heading" ng-click="collapsed = !collapsed">
     <span class="glyphicon glyphicon-{{ icon }}"></span>
-    <h2 class="panel-title">{{ title }}</h2>
     <span class="collapser glyphicon pull-right" ng-class="{'glyphicon-chevron-down': !collapsed, 'glyphicon-chevron-left': collapsed}"></span>
+    <h2 class="panel-title">{{ title }}</h2>
   </div>
 
   <div ng-transclude class="panel-body" ng-hide="collapsed">

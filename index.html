@@ -12,6 +12,7 @@
     <script src="js/builder-utils.js"></script>
     <script src="js/builder-request.js"></script>
     <script src="js/builder-capabilities.js"></script>
+    <script src="js/builder-directives.js"></script>
     <script src="js/builder.js"></script>
 
     <link href='http://fonts.googleapis.com/css?family=Fascinate|Signika:700' rel='stylesheet' type='text/css'>
@@ -31,12 +32,7 @@
       <form role="form">
 
         <!-- General inputs -->
-        <fieldset class="row">
-          <h2>
-            <span class="glyphicon glyphicon-cog"></span>
-            Service settings
-          </h2>
-
+        <fieldset builder-section title="Service Settings" icon="cog">
           <div class="alert alert-danger" ng-show="capabilitiesError">
             {{ capabilitiesError }}
           </div>
@@ -72,12 +68,7 @@
         </fieldset>
 
         <!-- Bounds inputs -->
-        <fieldset class="row">
-          <h2>
-            <span class="glyphicon glyphicon-globe"></span>
-            Geographic Bounds
-          </h2>
-
+        <fieldset builder-section title="Geographic Bounds" icon="globe">
           <fieldset class="col-md-6">
             <label>Input the geographic bounds for this request:</label>
 
@@ -118,17 +109,12 @@
           </fieldset>
 
           <fieldset class="col-md-6">
-            <div id="map"></div>
+            <div id="map" ng-init="initMap()"></div>
           </fieldset>
         </fieldset>
         
         <!-- WMS inputs -->
-        <fieldset class="row" ng-show="request.service == 'WMS'">
-          <h2>
-            <span class="glyphicon glyphicon-picture"></span>
-            WMS Settings
-          </h2>
-
+        <fieldset builder-section title="WMS Settings" icon="picture" ng-show="request.service == 'WMS'">
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.features}">
             <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" id="wms-layers" class="form-control" ng-model="request.features" ng-options="name as name for (name, feature) in featureList"
@@ -165,12 +151,7 @@
         </fieldset>
 
         <!-- WFS inputs -->
-        <fieldset class="row" ng-show="request.service == 'WFS'">
-          <h2>
-            <span class="glyphicon glyphicon-list-alt"></span>
-            WFS Settings
-          </h2>
-
+        <fieldset builder-section title="WFS Settings" icon="list-alt" ng-show="request.service == 'WFS'">
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="request.feature" ng-options="name as name for (name, feature) in featureList"></select>
@@ -190,27 +171,17 @@
         </fieldset>
         
         <!-- ECQL input-->
-        <fieldset class="row">
-          <h2>
-            <span class="glyphicon glyphicon-filter"></span>
-            Data Filter
-          </h2>
-          
+        <fieldset builder-section title="Data Filter" icon="filter">
           <fieldset class="col-md-8"> 
             <label for="cql_filter">ECQL filter query:</label>
             <textarea name="cql_filter" id="ecql-filter" class="form-control" ng-model="cql_filter"></textarea>
+            <a href="http://docs.geoserver.org/latest/en/user/filter/ecql_reference.html#filter-ecql-reference">ECQL Reference</a>
           </fieldset>
         </fieldset>
-
-        <a href="http://docs.geoserver.org/latest/en/user/filter/ecql_reference.html#filter-ecql-reference">ECQL Reference</a>
       </form>
         
       <!-- WMS/WFS outputs -->
-      <div id="preview" class="row">
-        <h2>
-          <span class="glyphicon glyphicon-eye-open"></span>
-          Data Preview
-        </h2>
+      <div builder-section title="Data Preview" icon="eye-open" id="preview" class="panel-primary">
         <div class="row">
           <figure id="preview-image" class="col-md-4">
             <h3>Image preview</h3>
@@ -237,15 +208,10 @@
             </table>
           </div>
         </div>
-      </div>
+      </div builder-section>
 
       <!-- Request outputs -->
-      <div id="request" class="row">
-        <h2>
-          <span class="glyphicon glyphicon-log-in"></span>
-          Request
-        </h2>
-
+      <div builder-section title="Request" icon="log-in" id="request" class="panel-success">
         <p>Request URL: <a id="result-url" ng-href="{{ url() }}">{{ url() }}</a></p>
         <p>Request JSON: <pre>{{ requestURL() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>
