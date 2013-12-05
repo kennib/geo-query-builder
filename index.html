@@ -30,7 +30,7 @@
       </header>
 
       <!-- About -->
-      <div builder-section title="About" icon="question-sign">
+      <div builder-section title="About" icon="question-sign" class="col-lg-12">
         <p>
           Geo Query Builder is a tool for generating queries for WMS and WFS servers.
         </p>
@@ -49,7 +49,7 @@
         </p>
       </div>
 
-      <form role="form">
+      <form role="form" class="row">
 
         <!-- General inputs -->
         <fieldset builder-section title="Service Settings" icon="cog">
@@ -88,7 +88,7 @@
         </fieldset>
 
         <!-- Bounds inputs -->
-        <fieldset builder-section title="Geographic Bounds" icon="globe">
+        <fieldset builder-section title="Geographic Bounds" icon="globe" class="col-lg-6">
           <fieldset class="col-md-6">
             <label>Input the geographic bounds for this request:</label>
 
@@ -121,7 +121,7 @@
             </div>
 
             <div class="row">
-              <label for="updateBbox" class="col-md-8 control-label">Change bounding box to match layer/feature type selection</label>
+              <label for="updateBbox" class="col-md-8 control-label">Resize bounds on feature selection</label>
               <div class="col-md-2">
                 <input name="updateBbox" id="updateBbox" type="checkbox" ng-model="settings.autobounds"></input>
               </div>
@@ -134,36 +134,36 @@
         </fieldset>
         
         <!-- WMS inputs -->
-        <fieldset builder-section title="WMS Settings" icon="picture" ng-show="request.service == 'WMS'">
-          <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.features}">
+        <fieldset builder-section title="WMS Settings" icon="picture" class="col-lg-6" ng-show="request.service == 'WMS'">
+          <fieldset class="col-md-4 col-lg-6 has-error" ng-class="{'has-success': request.features}">
             <label for="layers" class="control-label">Select the layers to request:</label>
             <select name="layers" id="wms-layers" class="form-control" ng-model="request.features" ng-options="name as name for (name, feature) in featureList"
               multiple="multiple" multiselect-dropdown required></select>
             <input class="form-control" ng-model="request.feature" ng-show="settings.manualinput"></input>
            </fieldset>
 
-          <fieldset class="col-md-4">
+          <fieldset class="col-md-4 col-lg-6">
             <label>Input image width and height:</label>
 
             <div class="row">
-              <label for="width" class="col-md-2 control-label">Width:</label>
-              <div class="col-md-8">
+              <label for="width" class="col-md-3 control-label">Width:</label>
+              <div class="col-md-6">
                 <input name="width" type="number" class="form-control" ng-model="request.image.width" step="10" min="0">
               </div>
-              <label class="col-md-2 control-label">px</label>
+              <label class="col-md-3 control-label">px</label>
             </div>
 
             <div class="row">
-              <label for="height" class="col-md-2 control-label">Height:</label>
-              <div class="col-md-8">
+              <label for="height" class="col-md-3 control-label">Height:</label>
+              <div class="col-md-6">
                 <input name="height" type="number" class="form-control" input-lg ng-model="request.image.height" step="10" min="0">
               </div>
-              <label class="col-md-2 control-label">px</label>
+              <label class="col-md-3 control-label">px</label>
             </div>
 
             <div class="row">
-              <label for="proportional" class="col-md-10 control-label">Keep dimensions proportional</label>
-              <div class="col-md-2">
+              <label for="proportional" class="col-md-9 control-label">Proportional</label>
+              <div class="col-md-3">
                 <input name="proportional" id="proportional" type="checkbox" ng-model="settings.proportional"></input>
               </div>
             </div>
@@ -171,7 +171,7 @@
         </fieldset>
 
         <!-- WFS inputs -->
-        <fieldset builder-section title="WFS Settings" icon="list-alt" ng-show="request.service == 'WFS'">
+        <fieldset builder-section title="WFS Settings" icon="list-alt" class="col-lg-6" ng-show="request.service == 'WFS'">
           <fieldset class="col-md-4 has-error" ng-class="{'has-success': request.feature}">
             <label for="feature" class="form-label">Select the name of the feature type:</label>
             <select name="feature" class="form-control" ng-model="request.feature" ng-options="name as name for (name, feature) in featureList"></select>
@@ -191,7 +191,7 @@
         </fieldset>
         
         <!-- ECQL input-->
-        <fieldset builder-section title="Data Filter" icon="filter">
+        <fieldset builder-section title="Data Filter" icon="filter" class="col-lg-6">
           <fieldset class="col-md-8"> 
             <label for="cql_filter">ECQL filter query:</label>
             <textarea name="cql_filter" id="ecql-filter" class="form-control" ng-model="cql_filter"></textarea>
@@ -201,7 +201,7 @@
       </form>
         
       <!-- WMS/WFS outputs -->
-      <div builder-section title="Data Preview" icon="eye-open" id="preview" class="panel-primary">
+      <div builder-section title="Data Preview" icon="eye-open" id="preview" class="panel-primary col-lg-6">
         <div class="row">
           <figure id="preview-image" class="col-md-4">
             <h3>Image preview</h3>
@@ -231,7 +231,7 @@
       </div builder-section>
 
       <!-- Request outputs -->
-      <div builder-section title="Request" icon="log-in" id="request" class="panel-success">
+      <div builder-section title="Request" icon="log-in" id="request" class="panel-success col-lg-6">
         <p>Request URL: <a id="result-url" ng-href="{{ url() }}">{{ url() }}</a></p>
         <p>Request JSON: <pre>{{ requestURL() | json }}</pre></p>
         <p>Request CURL: <pre>{{ CURL() }}</pre></p>

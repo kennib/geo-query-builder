@@ -4,6 +4,18 @@
   padding-bottom: 0px;
 }
 
+/* Scale contianer to full page */
+@media (min-width: 1200px) {
+  .container {
+    width: 90%;
+  }
+}
+
+/* Keep rows the same size */
+.row {
+  margin: 0px;
+}
+
 /* Align header */
 header {
   width: 100%;
@@ -60,6 +72,10 @@ a#result-url {
 * Include a heading with an icon and title and some collapsible content
 *
 ******************************************************/
+
+.panel.col-lg-6 {
+  padding: 0px;
+}
 
 .panel-heading {
   font-size: 25px;
